@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-HotelOS.Workers-48e4a137-9143-4699-8904-13c2273ac80e</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HotelOS.Application\HotelOS.Application.csproj" />
+    <ProjectReference Include="..\HotelOS.Infrastructure\HotelOS.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
