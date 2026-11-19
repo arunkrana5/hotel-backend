@@ -39,9 +39,45 @@ public class DatabaseSeeder
         _logger = logger;
     }
 
+    public async Task ResetAndReSeedAsync(CancellationToken cancellationToken = default)
+    {
+        _logger.LogWarning("HotelOS Database Reset: Purging all application schemas...");
+
+        const string dropSql = @"
+            DROP SCHEMA IF EXISTS identity CASCADE;
+            DROP SCHEMA IF EXISTS masters CASCADE;
+            DROP SCHEMA IF EXISTS configuration CASCADE;
+            DROP SCHEMA IF EXISTS workflow CASCADE;
+            DROP SCHEMA IF EXISTS audit CASCADE;
+            DROP SCHEMA IF EXISTS pms CASCADE;
+            DROP SCHEMA IF EXISTS housekeeping CASCADE;
+            DROP SCHEMA IF EXISTS restaurant CASCADE;
+            DROP SCHEMA IF EXISTS banquet CASCADE;
+            DROP SCHEMA IF EXISTS operations CASCADE;
+            DROP SCHEMA IF EXISTS purchase CASCADE;
+            DROP SCHEMA IF EXISTS inventory CASCADE;
+            DROP SCHEMA IF EXISTS finance CASCADE;
+            DROP SCHEMA IF EXISTS hr CASCADE;
+            DROP SCHEMA IF EXISTS maintenance CASCADE;
+            DROP SCHEMA IF EXISTS security CASCADE;
+            DROP SCHEMA IF EXISTS platform CASCADE;
+            DROP SCHEMA IF EXISTS public CASCADE;
+            CREATE SCHEMA public;
+        ";
+
+        await _context.Database.ExecuteSqlRawAsync(dropSql, cancellationToken);
+        _logger.LogInformation("All schemas dropped. Running fresh EF Core migrations...");
+
+        await _context.Database.MigrateAsync(cancellationToken);
+        _logger.LogInformation("Migrations applied. Seeding fresh enterprise baseline data...");
+
+        await SeedAsync(cancellationToken);
+        _logger.LogInformation("HotelOS Database reset and baseline seed completed successfully.");
+    }
+
     public async Task SeedAsync(CancellationToken cancellationToken = default)
     {
-        await _context.Database.EnsureCreatedAsync(cancellationToken);
+        await _context.Database.MigrateAsync(cancellationToken);
 
         // 1. Roles & Permissions & SuperAdmin
         await SeedIdentityAsync(cancellationToken);

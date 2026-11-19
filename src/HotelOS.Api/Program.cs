@@ -82,6 +82,13 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+    if (args.Contains("--reset-db"))
+    {
+        Console.WriteLine("[HotelOS] --reset-db flag detected. Purging schemas, running EF migrations, and re-seeding baseline data...");
+        await seeder.ResetAndReSeedAsync();
+        Console.WriteLine("[HotelOS] Database successfully reset and re-seeded. Ready for use.");
+        return;
+    }
     await seeder.SeedAsync();
 }
 

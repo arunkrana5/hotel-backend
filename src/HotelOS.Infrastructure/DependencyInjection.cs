@@ -17,11 +17,14 @@ public static class DependencyInjection
             ?? "Host=127.0.0.1;Port=5432;Database=hotelos_db;Username=postgres;Password=postgres";
 
         services.AddDbContext<HotelOSDbContext>(options =>
+        {
             options.UseNpgsql(connectionString, npgsqlOptions =>
             {
                 npgsqlOptions.MigrationsAssembly(typeof(HotelOSDbContext).Assembly.FullName);
                 npgsqlOptions.MigrationsHistoryTable("__EFMigrationsHistory", "platform");
-            }));
+            });
+            options.ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+        });
 
         services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<ITokenService, TokenService>();
