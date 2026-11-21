@@ -20,6 +20,12 @@ public interface IInventoryService
         string createdBy,
         CancellationToken cancellationToken = default);
 
+    Task<InventoryItemDto> UpdateItemAsync(
+        long id,
+        UpdateInventoryItemRequest request,
+        string modifiedBy,
+        CancellationToken cancellationToken = default);
+
     Task<StockTransactionDto> RecordTransactionAsync(
         RecordStockTransactionRequest request,
         long propertyId,

@@ -23,6 +23,16 @@ public record CreateUserRequest(
 
 public record UpdateUserStatusRequest(string Status);
 
+public record UpdateUserRequest(
+    string Email,
+    string FirstName,
+    string LastName,
+    string? PhoneNumber,
+    string? EmployeeId,
+    List<long>? RoleIds = null,
+    long? DepartmentId = null
+);
+
 public record AdminResetPasswordRequest(string NewPassword);
 
 public record UserItemDto(
@@ -247,6 +257,75 @@ public class UsersController : ControllerBase
         );
 
         return Ok(ApiResponse<UserItemDto>.Ok(dto, "User created successfully."));
+    }
+
+    [HttpPut("users/{id:long}")]
+    public async Task<IActionResult> UpdateUser(long id, [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
+    {
+        var user = await _context.Users
+            .Include(u => u.UserRoles)
+            .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted, cancellationToken);
+
+        if (user == null)
+            return NotFound(ApiResponse<UserItemDto>.Fail("User not found"));
+
+        if (!string.IsNullOrWhiteSpace(request.Email))
+        {
+            string normEmail = request.Email.Trim().ToUpperInvariant();
+            if (await _context.Users.AnyAsync(u => u.NormalizedEmail == normEmail && u.Id != id, cancellationToken))
+            {
+                return BadRequest(ApiResponse<UserItemDto>.Fail("Email address is already in use by another user."));
+            }
+            user.Email = request.Email.Trim();
+            user.NormalizedEmail = normEmail;
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.FirstName)) user.FirstName = request.FirstName.Trim();
+        if (!string.IsNullOrWhiteSpace(request.LastName)) user.LastName = request.LastName.Trim();
+        user.PhoneNumber = request.PhoneNumber;
+        user.EmployeeId = request.EmployeeId;
+        if (request.DepartmentId.HasValue) user.DepartmentId = request.DepartmentId;
+
+        user.ModifiedAt = DateTimeOffset.UtcNow;
+        user.ModifiedBy = _currentUser.Username ?? "SYSTEM";
+
+        if (request.RoleIds != null)
+        {
+            _context.UserRoles.RemoveRange(user.UserRoles);
+            foreach (var roleId in request.RoleIds)
+            {
+                _context.UserRoles.Add(new UserRole
+                {
+                    UserId = user.Id,
+                    RoleId = roleId,
+                    AssignedBy = _currentUser.Username ?? "SYSTEM"
+                });
+            }
+        }
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        var roles = await _context.UserRoles
+            .Where(ur => ur.UserId == user.Id)
+            .Select(ur => ur.Role.Name)
+            .ToListAsync(cancellationToken);
+
+        var dto = new UserItemDto(
+            user.Id,
+            user.Username,
+            user.Email,
+            user.FirstName,
+            user.LastName,
+            user.FullName,
+            user.PhoneNumber,
+            user.EmployeeId,
+            user.Status.ToString(),
+            roles,
+            user.LastLoginAt,
+            user.CreatedAt
+        );
+
+        return Ok(ApiResponse<UserItemDto>.Ok(dto, "User profile updated successfully."));
     }
 
     [HttpPut("users/{id}/status")]

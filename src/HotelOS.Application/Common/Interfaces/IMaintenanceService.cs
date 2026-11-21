@@ -21,6 +21,12 @@ public interface IMaintenanceService
         string createdBy,
         CancellationToken cancellationToken = default);
 
+    Task<AssetDto?> UpdateAssetAsync(
+        long id,
+        UpdateAssetRequest request,
+        string updatedBy,
+        CancellationToken cancellationToken = default);
+
     // Work Orders
     Task<PagedResult<WorkOrderDto>> GetWorkOrdersPagedAsync(
         long propertyId = 1,
@@ -35,6 +41,12 @@ public interface IMaintenanceService
         CreateWorkOrderRequest request,
         long propertyId,
         string createdBy,
+        CancellationToken cancellationToken = default);
+
+    Task<WorkOrderDto?> UpdateWorkOrderAsync(
+        long id,
+        UpdateWorkOrderRequest request,
+        string updatedBy,
         CancellationToken cancellationToken = default);
 
     Task<WorkOrderDto?> UpdateWorkOrderStatusAsync(

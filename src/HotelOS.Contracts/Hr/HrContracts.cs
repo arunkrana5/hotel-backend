@@ -37,6 +37,18 @@ public record UpdateEmployeeStatusRequest(
     string Status
 );
 
+public record UpdateEmployeeRequest(
+    string FirstName,
+    string LastName,
+    string DepartmentCode,
+    string Designation,
+    string EmploymentType,
+    decimal BasicSalary,
+    string Email,
+    string Phone,
+    string? EmergencyContact
+);
+
 public record AttendanceRecordDto(
     long Id,
     long EmployeeId,

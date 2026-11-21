@@ -132,6 +132,51 @@ public class HrService : IHrService
         );
     }
 
+    public async Task<EmployeeDto?> UpdateEmployeeAsync(
+        long employeeId,
+        UpdateEmployeeRequest request,
+        string updatedBy,
+        CancellationToken cancellationToken = default)
+    {
+        var employee = await _context.Employees
+            .FirstOrDefaultAsync(e => e.Id == employeeId && !e.IsDeleted, cancellationToken);
+
+        if (employee == null) return null;
+
+        if (!string.IsNullOrWhiteSpace(request.FirstName)) employee.FirstName = request.FirstName.Trim();
+        if (!string.IsNullOrWhiteSpace(request.LastName)) employee.LastName = request.LastName.Trim();
+        if (!string.IsNullOrWhiteSpace(request.DepartmentCode)) employee.DepartmentCode = request.DepartmentCode.Trim().ToUpperInvariant();
+        if (!string.IsNullOrWhiteSpace(request.Designation)) employee.Designation = request.Designation.Trim();
+        if (!string.IsNullOrWhiteSpace(request.EmploymentType)) employee.EmploymentType = request.EmploymentType.Trim().ToUpperInvariant();
+        if (request.BasicSalary > 0) employee.BasicSalary = request.BasicSalary;
+        if (!string.IsNullOrWhiteSpace(request.Email)) employee.Email = request.Email.Trim().ToLowerInvariant();
+        if (!string.IsNullOrWhiteSpace(request.Phone)) employee.Phone = request.Phone.Trim();
+        employee.EmergencyContact = request.EmergencyContact?.Trim();
+
+        employee.ModifiedAt = DateTimeOffset.UtcNow;
+        employee.ModifiedBy = updatedBy;
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return new EmployeeDto(
+            employee.Id,
+            employee.EmployeeCode,
+            employee.UserId,
+            employee.FirstName,
+            employee.LastName,
+            $"{employee.FirstName} {employee.LastName}".Trim(),
+            employee.DepartmentCode,
+            employee.Designation,
+            employee.DateOfJoining.ToString("yyyy-MM-dd"),
+            employee.EmploymentType,
+            employee.BasicSalary,
+            employee.Status,
+            employee.Email,
+            employee.Phone,
+            employee.EmergencyContact
+        );
+    }
+
     public async Task<EmployeeDto?> UpdateEmployeeStatusAsync(
         long employeeId,
         UpdateEmployeeStatusRequest request,

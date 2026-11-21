@@ -47,6 +47,17 @@ public class InventoryController : ControllerBase
         return Ok(ApiResponse<InventoryItemDto>.Ok(result, "Inventory item created successfully."));
     }
 
+    [HttpPut("items/{id:long}")]
+    public async Task<IActionResult> UpdateItem(
+        long id,
+        [FromBody] UpdateInventoryItemRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var result = await _inventoryService.UpdateItemAsync(id, request, user, cancellationToken);
+        return Ok(ApiResponse<InventoryItemDto>.Ok(result, "Inventory item updated successfully."));
+    }
+
     [HttpGet("transactions")]
     public async Task<IActionResult> GetTransactions(
         [FromQuery] int page = 1,

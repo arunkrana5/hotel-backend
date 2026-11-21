@@ -69,6 +69,20 @@ public class RestaurantController : ControllerBase
         return Ok(ApiResponse<MenuItemDto>.Ok(result, "Menu item created successfully."));
     }
 
+    [HttpPut("menu/{id:long}")]
+    public async Task<IActionResult> UpdateMenuItem(
+        [FromRoute] long id,
+        [FromBody] UpdateMenuItemRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var result = await _restaurantService.UpdateMenuItemAsync(id, request, user, cancellationToken);
+        if (result == null)
+            return NotFound(ApiResponse.FailMessage($"Menu item #{id} not found.", 404));
+
+        return Ok(ApiResponse<MenuItemDto>.Ok(result, "Menu item updated successfully."));
+    }
+
     [HttpPut("menu/{id}/availability")]
     public async Task<IActionResult> ToggleMenuItemAvailability(
         [FromRoute] long id,

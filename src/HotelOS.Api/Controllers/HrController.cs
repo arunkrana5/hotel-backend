@@ -47,6 +47,18 @@ public class HrController : ControllerBase
         return Ok(ApiResponse<EmployeeDto>.Ok(result, "Employee enrolled successfully."));
     }
 
+    [HttpPut("employees/{id:long}")]
+    public async Task<IActionResult> UpdateEmployee(
+        [FromRoute] long id,
+        [FromBody] UpdateEmployeeRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var result = await _hrService.UpdateEmployeeAsync(id, request, user, cancellationToken);
+        if (result == null) return NotFound(ApiResponse<EmployeeDto>.Fail("Employee not found."));
+        return Ok(ApiResponse<EmployeeDto>.Ok(result, "Employee updated successfully."));
+    }
+
     [HttpPut("employees/{id}/status")]
     public async Task<IActionResult> UpdateEmployeeStatus(
         [FromRoute] long id,

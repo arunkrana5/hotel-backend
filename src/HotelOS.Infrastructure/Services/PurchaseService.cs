@@ -98,6 +98,43 @@ public class PurchaseService : IPurchaseService
         );
     }
 
+    public async Task<VendorDto> UpdateVendorAsync(
+        long id,
+        UpdateVendorRequest request,
+        string updatedBy,
+        CancellationToken cancellationToken = default)
+    {
+        var vendor = await _context.Vendors.FindAsync([id], cancellationToken)
+            ?? throw new KeyNotFoundException($"Vendor #{id} not found.");
+
+        if (!string.IsNullOrWhiteSpace(request.VendorName)) vendor.VendorName = request.VendorName.Trim();
+        if (!string.IsNullOrWhiteSpace(request.ContactPerson)) vendor.ContactPerson = request.ContactPerson.Trim();
+        if (!string.IsNullOrWhiteSpace(request.Email)) vendor.Email = request.Email.Trim();
+        if (!string.IsNullOrWhiteSpace(request.Phone)) vendor.Phone = request.Phone.Trim();
+        if (!string.IsNullOrWhiteSpace(request.Address)) vendor.Address = request.Address.Trim();
+        vendor.TaxNumber = request.TaxNumber?.Trim();
+        if (request.PaymentTermsDays >= 0) vendor.PaymentTermsDays = request.PaymentTermsDays;
+        if (!string.IsNullOrWhiteSpace(request.Status)) vendor.Status = request.Status.Trim().ToUpperInvariant();
+
+        vendor.ModifiedAt = DateTimeOffset.UtcNow;
+        vendor.ModifiedBy = updatedBy;
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return new VendorDto(
+            vendor.Id,
+            vendor.VendorCode,
+            vendor.VendorName,
+            vendor.ContactPerson,
+            vendor.Email,
+            vendor.Phone,
+            vendor.Address,
+            vendor.TaxNumber,
+            vendor.PaymentTermsDays,
+            vendor.Status
+        );
+    }
+
     public async Task<PagedResult<PurchaseRequisitionDto>> GetRequisitionsPagedAsync(
         long propertyId = 1,
         int page = 1,

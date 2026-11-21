@@ -46,6 +46,17 @@ public class PurchaseController : ControllerBase
         return Ok(ApiResponse<VendorDto>.Ok(result, "Vendor registered successfully."));
     }
 
+    [HttpPut("vendors/{id:long}")]
+    public async Task<IActionResult> UpdateVendor(
+        [FromRoute] long id,
+        [FromBody] UpdateVendorRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var result = await _purchaseService.UpdateVendorAsync(id, request, user, cancellationToken);
+        return Ok(ApiResponse<VendorDto>.Ok(result, "Vendor updated successfully."));
+    }
+
     [HttpGet("requisitions")]
     public async Task<IActionResult> GetRequisitions(
         [FromQuery] int page = 1,

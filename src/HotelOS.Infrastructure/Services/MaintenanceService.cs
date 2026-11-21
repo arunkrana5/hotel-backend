@@ -125,6 +125,46 @@ public class MaintenanceService : IMaintenanceService
         );
     }
 
+    public async Task<AssetDto?> UpdateAssetAsync(
+        long id,
+        UpdateAssetRequest request,
+        string updatedBy,
+        CancellationToken cancellationToken = default)
+    {
+        var asset = await _context.Assets.FindAsync([id], cancellationToken);
+        if (asset == null) return null;
+
+        if (!string.IsNullOrWhiteSpace(request.AssetName)) asset.AssetName = request.AssetName.Trim();
+        if (!string.IsNullOrWhiteSpace(request.Category)) asset.Category = request.Category.Trim().ToUpperInvariant();
+        if (!string.IsNullOrWhiteSpace(request.Location)) asset.Location = request.Location.Trim();
+        if (DateOnly.TryParse(request.PurchaseDate, out var pd)) asset.PurchaseDate = pd;
+        if (request.PurchaseCost >= 0) asset.PurchaseCost = request.PurchaseCost;
+        if (!string.IsNullOrWhiteSpace(request.WarrantyExpiryDate) && DateOnly.TryParse(request.WarrantyExpiryDate, out var wd))
+            asset.WarrantyExpiryDate = wd;
+        if (request.SerialNumber != null) asset.SerialNumber = request.SerialNumber.Trim();
+        if (request.Manufacturer != null) asset.Manufacturer = request.Manufacturer.Trim();
+        if (!string.IsNullOrWhiteSpace(request.Status)) asset.Status = request.Status.Trim().ToUpperInvariant();
+
+        asset.ModifiedAt = DateTimeOffset.UtcNow;
+        asset.ModifiedBy = updatedBy;
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return new AssetDto(
+            asset.Id,
+            asset.AssetCode,
+            asset.AssetName,
+            asset.Category,
+            asset.Location,
+            asset.PurchaseDate.ToString("yyyy-MM-dd"),
+            asset.PurchaseCost,
+            asset.WarrantyExpiryDate?.ToString("yyyy-MM-dd"),
+            asset.Status,
+            asset.SerialNumber,
+            asset.Manufacturer
+        );
+    }
+
     public async Task<PagedResult<WorkOrderDto>> GetWorkOrdersPagedAsync(
         long propertyId = 1,
         int page = 1,
@@ -231,6 +271,52 @@ public class MaintenanceService : IMaintenanceService
             workOrder.Status,
             workOrder.AssignedToUserId,
             user != null ? $"{user.FirstName} {user.LastName}".Trim() : null,
+            workOrder.RequestedAt,
+            workOrder.CompletedAt,
+            workOrder.ResolutionNotes,
+            workOrder.TotalCost
+        );
+    }
+
+    public async Task<WorkOrderDto?> UpdateWorkOrderAsync(
+        long id,
+        UpdateWorkOrderRequest request,
+        string updatedBy,
+        CancellationToken cancellationToken = default)
+    {
+        var workOrder = await _context.WorkOrders
+            .Include(w => w.Asset)
+            .Include(w => w.Room)
+            .Include(w => w.AssignedToUser)
+            .FirstOrDefaultAsync(w => w.Id == id && !w.IsDeleted, cancellationToken);
+
+        if (workOrder == null) return null;
+
+        if (!string.IsNullOrWhiteSpace(request.DepartmentCode)) workOrder.DepartmentCode = request.DepartmentCode.Trim().ToUpperInvariant();
+        if (!string.IsNullOrWhiteSpace(request.IssueDescription)) workOrder.IssueDescription = request.IssueDescription.Trim();
+        if (!string.IsNullOrWhiteSpace(request.Priority)) workOrder.Priority = request.Priority.Trim().ToUpperInvariant();
+        workOrder.AssignedToUserId = request.AssignedToUserId;
+        if (!string.IsNullOrWhiteSpace(request.ResolutionNotes)) workOrder.ResolutionNotes = request.ResolutionNotes.Trim();
+        if (request.TotalCost >= 0) workOrder.TotalCost = request.TotalCost;
+
+        workOrder.ModifiedAt = DateTimeOffset.UtcNow;
+        workOrder.ModifiedBy = updatedBy;
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return new WorkOrderDto(
+            workOrder.Id,
+            workOrder.WorkOrderNumber,
+            workOrder.AssetId,
+            workOrder.Asset?.AssetName,
+            workOrder.RoomId,
+            workOrder.Room?.RoomNumber,
+            workOrder.DepartmentCode,
+            workOrder.IssueDescription,
+            workOrder.Priority,
+            workOrder.Status,
+            workOrder.AssignedToUserId,
+            workOrder.AssignedToUser != null ? $"{workOrder.AssignedToUser.FirstName} {workOrder.AssignedToUser.LastName}".Trim() : null,
             workOrder.RequestedAt,
             workOrder.CompletedAt,
             workOrder.ResolutionNotes,

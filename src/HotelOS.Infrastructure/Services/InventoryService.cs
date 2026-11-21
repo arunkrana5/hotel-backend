@@ -105,6 +105,43 @@ public class InventoryService : IInventoryService
         );
     }
 
+    public async Task<InventoryItemDto> UpdateItemAsync(
+        long id,
+        UpdateInventoryItemRequest request,
+        string modifiedBy,
+        CancellationToken cancellationToken = default)
+    {
+        var item = await _context.InventoryItems.FindAsync([id], cancellationToken)
+            ?? throw new KeyNotFoundException($"Inventory item #{id} not found.");
+
+        item.ItemName = request.ItemName.Trim();
+        item.Category = request.Category.Trim().ToUpperInvariant();
+        item.UnitOfMeasure = request.UnitOfMeasure.Trim().ToUpperInvariant();
+        item.UnitCost = request.UnitCost;
+        item.ReorderLevel = request.ReorderLevel;
+        item.MinimumStock = request.MinimumStock;
+        item.MaximumStock = request.MaximumStock;
+        item.LocationBin = request.LocationBin;
+        item.ModifiedAt = DateTimeOffset.UtcNow;
+        item.ModifiedBy = modifiedBy;
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return new InventoryItemDto(
+            item.Id,
+            item.ItemCode,
+            item.ItemName,
+            item.Category,
+            item.UnitOfMeasure,
+            item.UnitCost,
+            item.CurrentStock,
+            item.ReorderLevel,
+            item.MinimumStock,
+            item.MaximumStock,
+            item.LocationBin
+        );
+    }
+
     public async Task<StockTransactionDto> RecordTransactionAsync(
         RecordStockTransactionRequest request,
         long propertyId,

@@ -47,6 +47,18 @@ public class MaintenanceController : ControllerBase
         return Ok(ApiResponse<AssetDto>.Ok(result, "Asset registered successfully."));
     }
 
+    [HttpPut("assets/{id:long}")]
+    public async Task<IActionResult> UpdateAsset(
+        [FromRoute] long id,
+        [FromBody] UpdateAssetRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var result = await _maintenanceService.UpdateAssetAsync(id, request, user, cancellationToken);
+        if (result == null) return NotFound(ApiResponse<AssetDto>.Fail("Asset not found."));
+        return Ok(ApiResponse<AssetDto>.Ok(result, "Asset updated successfully."));
+    }
+
     [HttpGet("work-orders")]
     public async Task<IActionResult> GetWorkOrders(
         [FromQuery] int page = 1,
@@ -70,6 +82,18 @@ public class MaintenanceController : ControllerBase
         string user = _currentUser.Username ?? "SYSTEM";
         var result = await _maintenanceService.CreateWorkOrderAsync(request, propertyId, user, cancellationToken);
         return Ok(ApiResponse<WorkOrderDto>.Ok(result, "Work order logged successfully."));
+    }
+
+    [HttpPut("work-orders/{id:long}")]
+    public async Task<IActionResult> UpdateWorkOrder(
+        [FromRoute] long id,
+        [FromBody] UpdateWorkOrderRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var result = await _maintenanceService.UpdateWorkOrderAsync(id, request, user, cancellationToken);
+        if (result == null) return NotFound(ApiResponse<WorkOrderDto>.Fail("Work order not found."));
+        return Ok(ApiResponse<WorkOrderDto>.Ok(result, "Work order updated successfully."));
     }
 
     [HttpPut("work-orders/{id}/status")]

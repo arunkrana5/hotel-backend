@@ -27,6 +27,12 @@ public interface IHrService
         string updatedBy,
         CancellationToken cancellationToken = default);
 
+    Task<EmployeeDto?> UpdateEmployeeAsync(
+        long employeeId,
+        UpdateEmployeeRequest request,
+        string updatedBy,
+        CancellationToken cancellationToken = default);
+
     // Attendance
     Task<PagedResult<AttendanceRecordDto>> GetAttendancePagedAsync(
         long propertyId = 1,

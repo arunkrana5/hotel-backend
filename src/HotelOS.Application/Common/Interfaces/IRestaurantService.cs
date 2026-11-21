@@ -29,6 +29,12 @@ public interface IRestaurantService
         string createdBy,
         CancellationToken cancellationToken = default);
 
+    Task<MenuItemDto?> UpdateMenuItemAsync(
+        long id,
+        UpdateMenuItemRequest request,
+        string updatedBy,
+        CancellationToken cancellationToken = default);
+
     Task<MenuItemDto?> ToggleMenuItemAvailabilityAsync(
         long menuItemId,
         UpdateMenuItemAvailabilityRequest request,

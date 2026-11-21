@@ -27,6 +27,17 @@ public record CreateInventoryItemRequest(
     string? LocationBin
 );
 
+public record UpdateInventoryItemRequest(
+    string ItemName,
+    string Category,
+    string UnitOfMeasure,
+    decimal UnitCost,
+    decimal ReorderLevel,
+    decimal MinimumStock,
+    decimal MaximumStock,
+    string? LocationBin
+);
+
 public record UpdateStockLevelRequest(
     decimal QuantityChange,
     string TransactionType, // RECEIPT, ISSUE, ADJUSTMENT

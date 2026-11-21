@@ -145,6 +145,43 @@ public class RestaurantService : IRestaurantService
         );
     }
 
+    public async Task<MenuItemDto?> UpdateMenuItemAsync(
+        long id,
+        UpdateMenuItemRequest request,
+        string updatedBy,
+        CancellationToken cancellationToken = default)
+    {
+        var item = await _context.MenuItems.FindAsync([id], cancellationToken);
+        if (item == null) return null;
+
+        if (!string.IsNullOrWhiteSpace(request.ItemName)) item.ItemName = request.ItemName.Trim();
+        if (!string.IsNullOrWhiteSpace(request.Category)) item.Category = request.Category.Trim().ToUpperInvariant();
+        item.Description = request.Description?.Trim();
+        if (request.Price >= 0) item.Price = request.Price;
+        if (request.PreparationTimeMinutes >= 0) item.PreparationTimeMinutes = request.PreparationTimeMinutes;
+        if (!string.IsNullOrWhiteSpace(request.DietaryType)) item.DietaryType = request.DietaryType.Trim().ToUpperInvariant();
+        item.IsAvailable = request.IsAvailable;
+        if (request.ImageUrl != null) item.ImageUrl = request.ImageUrl;
+
+        item.ModifiedAt = DateTimeOffset.UtcNow;
+        item.ModifiedBy = updatedBy;
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return new MenuItemDto(
+            item.Id,
+            item.ItemCode,
+            item.ItemName,
+            item.Category,
+            item.Description,
+            item.Price,
+            item.PreparationTimeMinutes,
+            item.DietaryType,
+            item.IsAvailable,
+            item.ImageUrl
+        );
+    }
+
     public async Task<MenuItemDto?> ToggleMenuItemAvailabilityAsync(
         long menuItemId,
         UpdateMenuItemAvailabilityRequest request,

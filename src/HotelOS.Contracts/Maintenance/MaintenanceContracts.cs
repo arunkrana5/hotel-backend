@@ -26,6 +26,18 @@ public record CreateAssetRequest(
     string? Manufacturer
 );
 
+public record UpdateAssetRequest(
+    string AssetName,
+    string Category,
+    string Location,
+    string PurchaseDate,
+    decimal PurchaseCost,
+    string? WarrantyExpiryDate,
+    string? SerialNumber,
+    string? Manufacturer,
+    string? Status = null
+);
+
 public record WorkOrderDto(
     long Id,
     string WorkOrderNumber,
@@ -58,4 +70,13 @@ public record UpdateWorkOrderStatusRequest(
     string Status,
     string? ResolutionNotes,
     decimal AdditionalCost
+);
+
+public record UpdateWorkOrderRequest(
+    string DepartmentCode,
+    string IssueDescription,
+    string Priority,
+    long? AssignedToUserId,
+    string? ResolutionNotes,
+    decimal TotalCost = 0
 );

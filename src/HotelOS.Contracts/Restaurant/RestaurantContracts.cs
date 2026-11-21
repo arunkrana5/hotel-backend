@@ -38,6 +38,17 @@ public record CreateMenuItemRequest(
     string? ImageUrl
 );
 
+public record UpdateMenuItemRequest(
+    string ItemName,
+    string Category,
+    string? Description,
+    decimal Price,
+    int PreparationTimeMinutes,
+    string DietaryType,
+    bool IsAvailable,
+    string? ImageUrl = null
+);
+
 public record UpdateMenuItemAvailabilityRequest(
     bool IsAvailable
 );

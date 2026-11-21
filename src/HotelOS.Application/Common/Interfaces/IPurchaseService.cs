@@ -20,6 +20,12 @@ public interface IPurchaseService
         string createdBy,
         CancellationToken cancellationToken = default);
 
+    Task<VendorDto> UpdateVendorAsync(
+        long id,
+        UpdateVendorRequest request,
+        string updatedBy,
+        CancellationToken cancellationToken = default);
+
     // Requisitions
     Task<PagedResult<PurchaseRequisitionDto>> GetRequisitionsPagedAsync(
         long propertyId = 1,

@@ -24,6 +24,17 @@ public record CreateVendorRequest(
     int PaymentTermsDays
 );
 
+public record UpdateVendorRequest(
+    string VendorName,
+    string ContactPerson,
+    string Email,
+    string Phone,
+    string Address,
+    string? TaxNumber,
+    int PaymentTermsDays,
+    string? Status = null
+);
+
 public record PurchaseRequisitionItemDto(
     long Id,
     string ItemName,
