@@ -8,6 +8,9 @@ COPY ["src/HotelOS.Application/*.csproj", "src/HotelOS.Application/"]
 COPY ["src/HotelOS.Infrastructure/*.csproj", "src/HotelOS.Infrastructure/"]
 COPY ["src/HotelOS.Api/*.csproj", "src/HotelOS.Api/"]
 COPY ["src/HotelOS.Workers/*.csproj", "src/HotelOS.Workers/"]
+COPY ["tests/HotelOS.UnitTests/*.csproj", "tests/HotelOS.UnitTests/"]
+COPY ["tests/HotelOS.IntegrationTests/*.csproj", "tests/HotelOS.IntegrationTests/"]
+COPY ["tests/HotelOS.ArchitectureTests/*.csproj", "tests/HotelOS.ArchitectureTests/"]
 
 RUN dotnet restore "HotelOS.Backend.sln"
 
@@ -20,4 +23,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:8080
 ENTRYPOINT ["dotnet", "HotelOS.Api.dll"]
