@@ -36,6 +36,7 @@ public interface IPmsService
         int pageSize = 10,
         string? search = null,
         string? vipStatus = null,
+        bool? isActive = null,
         CancellationToken cancellationToken = default);
 
     Task<GuestDto> CreateGuestAsync(
@@ -46,6 +47,38 @@ public interface IPmsService
 
     Task<GuestDto?> GetGuestByIdAsync(
         long guestId,
+        CancellationToken cancellationToken = default);
+
+    Task<GuestDto> UpdateGuestAsync(
+        long id,
+        UpdateGuestRequest request,
+        string modifiedBy,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> SetGuestStatusAsync(
+        long id,
+        bool isActive,
+        string modifiedBy,
+        CancellationToken cancellationToken = default);
+
+    Task<(bool Success, string Message)> DeleteGuestAsync(
+        long id,
+        string deletedBy,
+        CancellationToken cancellationToken = default);
+
+    Task<GuestCrmProfileDto?> GetGuestCrmProfileAsync(
+        long guestId,
+        CancellationToken cancellationToken = default);
+
+    Task<GuestCrmStatsDto> GetGuestCrmStatsAsync(
+        long propertyId = 1,
+        CancellationToken cancellationToken = default);
+
+    Task<DuplicateCheckResult> CheckDuplicateGuestAsync(
+        string email,
+        string phone,
+        long? excludeId = null,
+        long propertyId = 1,
         CancellationToken cancellationToken = default);
 
     // Reservations

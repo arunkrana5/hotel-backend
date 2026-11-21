@@ -172,24 +172,36 @@ public class PmsService : IPmsService
         int pageSize = 10,
         string? search = null,
         string? vipStatus = null,
+        bool? isActive = null,
         CancellationToken cancellationToken = default)
     {
         var query = _context.Guests
             .AsNoTracking()
             .Where(g => g.PropertyId == propertyId && !g.IsDeleted);
 
-        if (!string.IsNullOrWhiteSpace(search))
+        if (isActive.HasValue)
         {
-            string term = search.Trim();
-            query = query.Where(g =>
-                g.FirstName.Contains(term) ||
-                g.LastName.Contains(term) ||
-                g.Email.Contains(term) ||
-                g.Phone.Contains(term));
+            query = query.Where(g => g.IsActive == isActive.Value);
         }
 
-        if (!string.IsNullOrWhiteSpace(vipStatus))
-            query = query.Where(g => g.VipStatus == vipStatus.Trim());
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            string term = search.Trim().ToLower();
+            query = query.Where(g =>
+                g.FirstName.ToLower().Contains(term) ||
+                g.LastName.ToLower().Contains(term) ||
+                g.Email.ToLower().Contains(term) ||
+                g.Phone.Contains(term) ||
+                (g.IdDocumentNumber != null && g.IdDocumentNumber.ToLower().Contains(term)));
+        }
+
+        if (!string.IsNullOrWhiteSpace(vipStatus) && vipStatus != "ALL")
+        {
+            if (vipStatus == "VIP")
+                query = query.Where(g => g.VipStatus == "VIP" || g.VipStatus == "Platinum" || g.VipStatus == "Gold");
+            else
+                query = query.Where(g => g.VipStatus == vipStatus.Trim());
+        }
 
         int totalCount = await query.CountAsync(cancellationToken);
 
@@ -212,7 +224,9 @@ public class PmsService : IPmsService
                 g.LifetimeSpend,
                 g.SpecialPreferences,
                 g.City,
-                g.Country
+                g.Country,
+                g.IsActive,
+                g.Address
             ))
             .ToListAsync(cancellationToken);
 
@@ -233,13 +247,14 @@ public class PmsService : IPmsService
             Email = request.Email.Trim().ToLowerInvariant(),
             Phone = request.Phone.Trim(),
             IdDocumentType = request.IdDocumentType,
-            IdDocumentNumber = request.IdDocumentNumber,
-            Nationality = request.Nationality,
+            IdDocumentNumber = request.IdDocumentNumber?.Trim(),
+            Nationality = request.Nationality?.Trim(),
             VipStatus = string.IsNullOrWhiteSpace(request.VipStatus) ? "Standard" : request.VipStatus.Trim(),
-            SpecialPreferences = request.SpecialPreferences,
-            Address = request.Address,
-            City = request.City,
-            Country = request.Country,
+            SpecialPreferences = request.SpecialPreferences?.Trim(),
+            Address = request.Address?.Trim(),
+            City = request.City?.Trim(),
+            Country = request.Country?.Trim(),
+            IsActive = true,
             CreatedBy = createdBy
         };
 
@@ -261,7 +276,9 @@ public class PmsService : IPmsService
             guest.LifetimeSpend,
             guest.SpecialPreferences,
             guest.City,
-            guest.Country
+            guest.Country,
+            guest.IsActive,
+            guest.Address
         );
     }
 
@@ -288,8 +305,329 @@ public class PmsService : IPmsService
             g.LifetimeSpend,
             g.SpecialPreferences,
             g.City,
-            g.Country
+            g.Country,
+            g.IsActive,
+            g.Address
         );
+    }
+
+    public async Task<GuestDto> UpdateGuestAsync(
+        long id,
+        UpdateGuestRequest request,
+        string modifiedBy,
+        CancellationToken cancellationToken = default)
+    {
+        var guest = await _context.Guests.FirstOrDefaultAsync(g => g.Id == id && !g.IsDeleted, cancellationToken);
+        if (guest == null)
+            throw new KeyNotFoundException($"Guest #{id} not found.");
+
+        guest.FirstName = request.FirstName.Trim();
+        guest.LastName = request.LastName.Trim();
+        guest.Email = request.Email.Trim().ToLowerInvariant();
+        guest.Phone = request.Phone.Trim();
+        guest.IdDocumentType = request.IdDocumentType;
+        guest.IdDocumentNumber = request.IdDocumentNumber?.Trim();
+        guest.Nationality = request.Nationality?.Trim();
+        guest.VipStatus = string.IsNullOrWhiteSpace(request.VipStatus) ? "Standard" : request.VipStatus.Trim();
+        guest.SpecialPreferences = request.SpecialPreferences?.Trim();
+        guest.Address = request.Address?.Trim();
+        guest.City = request.City?.Trim();
+        guest.Country = request.Country?.Trim();
+        guest.IsActive = request.IsActive;
+        guest.ModifiedAt = DateTimeOffset.UtcNow;
+        guest.ModifiedBy = modifiedBy;
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return new GuestDto(
+            guest.Id,
+            guest.FirstName,
+            guest.LastName,
+            guest.FirstName + " " + guest.LastName,
+            guest.Email,
+            guest.Phone,
+            guest.IdDocumentType,
+            guest.IdDocumentNumber,
+            guest.Nationality,
+            guest.VipStatus,
+            guest.TotalStays,
+            guest.LifetimeSpend,
+            guest.SpecialPreferences,
+            guest.City,
+            guest.Country,
+            guest.IsActive,
+            guest.Address
+        );
+    }
+
+    public async Task<bool> SetGuestStatusAsync(
+        long id,
+        bool isActive,
+        string modifiedBy,
+        CancellationToken cancellationToken = default)
+    {
+        var guest = await _context.Guests.FirstOrDefaultAsync(g => g.Id == id && !g.IsDeleted, cancellationToken);
+        if (guest == null) return false;
+
+        guest.IsActive = isActive;
+        guest.ModifiedAt = DateTimeOffset.UtcNow;
+        guest.ModifiedBy = modifiedBy;
+        await _context.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
+    public async Task<(bool Success, string Message)> DeleteGuestAsync(
+        long id,
+        string deletedBy,
+        CancellationToken cancellationToken = default)
+    {
+        var guest = await _context.Guests.FirstOrDefaultAsync(g => g.Id == id && !g.IsDeleted, cancellationToken);
+        if (guest == null)
+            return (false, $"Guest #{id} not found.");
+
+        // Check if guest has active reservations or non-zero folio balances
+        bool hasActiveBookings = await _context.Reservations.AnyAsync(r =>
+            r.GuestId == id && !r.IsDeleted &&
+            r.ReservationStatus != "CANCELLED" && r.ReservationStatus != "CHECKED_OUT",
+            cancellationToken);
+
+        if (hasActiveBookings)
+        {
+            return (false, "Cannot delete guest profile with active or upcoming reservations. Consider deactivating the profile instead.");
+        }
+
+        bool hasOutstandingFolios = await _context.Folios.AnyAsync(f =>
+            f.GuestId == id && !f.IsDeleted && f.BalanceAmount != 0,
+            cancellationToken);
+
+        if (hasOutstandingFolios)
+        {
+            return (false, "Cannot delete guest profile with outstanding folio balances. Please settle open balances prior to deletion.");
+        }
+
+        // Soft delete
+        guest.IsDeleted = true;
+        guest.DeletedAt = DateTimeOffset.UtcNow;
+        guest.DeletedBy = deletedBy;
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return (true, "Guest profile archived successfully.");
+    }
+
+    public async Task<GuestCrmProfileDto?> GetGuestCrmProfileAsync(
+        long guestId,
+        CancellationToken cancellationToken = default)
+    {
+        var guest = await _context.Guests
+            .AsNoTracking()
+            .FirstOrDefaultAsync(g => g.Id == guestId && !g.IsDeleted, cancellationToken);
+
+        if (guest == null) return null;
+
+        var reservations = await _context.Reservations
+            .AsNoTracking()
+            .Where(r => r.GuestId == guestId && !r.IsDeleted)
+            .OrderByDescending(r => r.CheckInDate)
+            .ToListAsync(cancellationToken);
+
+        var folios = await _context.Folios
+            .Include(f => f.Items)
+            .Include(f => f.Reservation)
+            .AsNoTracking()
+            .Where(f => f.GuestId == guestId && !f.IsDeleted)
+            .OrderByDescending(f => f.CreatedAt)
+            .ToListAsync(cancellationToken);
+
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        int upcoming = reservations.Count(r => (r.ReservationStatus == "CONF" || r.ReservationStatus == "PROV") && r.CheckInDate >= today);
+        int completed = reservations.Count(r => r.ReservationStatus == "CHKO" || r.ActualCheckOutAt != null || r.CheckOutDate < today);
+
+        decimal totalRevenue = folios.Sum(f => f.TotalCharges);
+        if (totalRevenue == 0 && reservations.Any())
+        {
+            totalRevenue = reservations.Sum(r => r.PaidAmount > 0 ? r.PaidAmount : r.TotalEstimatedAmount);
+        }
+
+        decimal outstanding = folios.Sum(f => f.BalanceAmount);
+
+        var lastCompletedStay = reservations.FirstOrDefault(r => r.CheckOutDate <= today || r.ActualCheckOutAt != null);
+        string? lastStayStr = lastCompletedStay != null ? lastCompletedStay.CheckOutDate.ToString("yyyy-MM-dd") : null;
+
+        double avgDuration = reservations.Any()
+            ? reservations.Average(r => Math.Max(1, (r.CheckOutDate.DayNumber - r.CheckInDate.DayNumber)))
+            : 0;
+
+        var resDtos = reservations.Select(r => new ReservationDto(
+            r.Id,
+            r.ConfirmationNumber,
+            guest.Id,
+            guest.FirstName + " " + guest.LastName,
+            guest.Email,
+            guest.Phone,
+            guest.VipStatus,
+            r.RoomTypeCode,
+            r.AssignedRoomId,
+            r.AssignedRoom != null ? r.AssignedRoom.RoomNumber : null,
+            r.CheckInDate.ToString("yyyy-MM-dd"),
+            r.CheckOutDate.ToString("yyyy-MM-dd"),
+            r.AdultsCount,
+            r.ChildrenCount,
+            r.ReservationStatus,
+            r.BookingSource,
+            r.RatePerNight,
+            r.TotalEstimatedAmount,
+            r.PaidAmount,
+            r.TotalEstimatedAmount - r.PaidAmount,
+            r.SpecialRequests,
+            r.ActualCheckInAt,
+            r.ActualCheckOutAt
+        )).ToList();
+
+        var stayHistoryDtos = reservations.Select(r => new GuestStayHistoryDto(
+            r.Id,
+            r.ConfirmationNumber,
+            r.RoomTypeCode,
+            r.AssignedRoom != null ? r.AssignedRoom.RoomNumber : "Unassigned",
+            r.CheckInDate.ToString("yyyy-MM-dd"),
+            r.CheckOutDate.ToString("yyyy-MM-dd"),
+            Math.Max(1, r.CheckOutDate.DayNumber - r.CheckInDate.DayNumber),
+            r.TotalEstimatedAmount,
+            r.ReservationStatus
+        )).ToList();
+
+        var folioDtos = folios.Select(f => new GuestFolioSummaryDto(
+            f.Id,
+            f.FolioNumber,
+            f.Reservation != null ? f.Reservation.ConfirmationNumber : "Direct Billing",
+            f.Status,
+            f.TotalCharges,
+            f.TotalPayments,
+            f.BalanceAmount,
+            f.CreatedAt,
+            f.Items.Select(i => new GuestFolioItemDto(
+                i.Id,
+                i.ItemType,
+                i.DepartmentCode,
+                i.Description,
+                i.Amount,
+                i.PaymentModeCode,
+                i.TransactionReference,
+                i.PostedAt
+            )).ToList()
+        )).ToList();
+
+        var auditLog = new List<GuestAuditEventDto>
+        {
+            new("PROFILE_CREATED", $"Guest profile created in property system by {guest.CreatedBy ?? "SYSTEM"}", guest.CreatedAt, guest.CreatedBy ?? "SYSTEM")
+        };
+        if (guest.ModifiedAt.HasValue)
+        {
+            auditLog.Add(new("PROFILE_UPDATED", $"Profile data and preferences updated by {guest.ModifiedBy ?? "STAFF"}", guest.ModifiedAt.Value, guest.ModifiedBy ?? "STAFF"));
+        }
+        foreach (var r in reservations.Take(3))
+        {
+            auditLog.Add(new("RESERVATION_LINKED", $"Reservation #{r.ConfirmationNumber} ({r.RoomTypeCode}) linked to guest profile", r.CreatedAt, r.CreatedBy ?? "FRONT_DESK"));
+        }
+
+        var summary = new GuestCrmSummaryDto(
+            Math.Max(guest.TotalStays, reservations.Count),
+            upcoming,
+            completed,
+            totalRevenue,
+            outstanding,
+            lastStayStr,
+            Math.Round(avgDuration, 1)
+        );
+
+        return new GuestCrmProfileDto(
+            guest.Id,
+            guest.FirstName,
+            guest.LastName,
+            guest.FirstName + " " + guest.LastName,
+            guest.Email,
+            guest.Phone,
+            guest.IdDocumentType,
+            guest.IdDocumentNumber,
+            guest.Nationality,
+            guest.VipStatus,
+            guest.SpecialPreferences,
+            guest.Address,
+            guest.City,
+            guest.Country,
+            guest.IsActive,
+            guest.CreatedAt,
+            summary,
+            resDtos,
+            stayHistoryDtos,
+            folioDtos,
+            auditLog.OrderByDescending(a => a.Timestamp).ToList()
+        );
+    }
+
+    public async Task<GuestCrmStatsDto> GetGuestCrmStatsAsync(long propertyId = 1, CancellationToken cancellationToken = default)
+    {
+        var query = _context.Guests.AsNoTracking().Where(g => g.PropertyId == propertyId && !g.IsDeleted);
+
+        int total = await query.CountAsync(cancellationToken);
+        int active = await query.CountAsync(g => g.IsActive, cancellationToken);
+        int vip = await query.CountAsync(g => g.VipStatus == "VIP" || g.VipStatus == "Platinum" || g.VipStatus == "Gold", cancellationToken);
+        int inactive = total - active;
+
+        decimal totalSpend = await query.SumAsync(g => g.LifetimeSpend, cancellationToken);
+        decimal avgSpend = total > 0 ? Math.Round(totalSpend / total, 2) : 0m;
+
+        return new GuestCrmStatsDto(total, active, vip, inactive, totalSpend, avgSpend);
+    }
+
+    public async Task<DuplicateCheckResult> CheckDuplicateGuestAsync(
+        string email,
+        string phone,
+        long? excludeId = null,
+        long propertyId = 1,
+        CancellationToken cancellationToken = default)
+    {
+        string normEmail = email.Trim().ToLowerInvariant();
+        string normPhone = phone.Trim();
+
+        var query = _context.Guests
+            .AsNoTracking()
+            .Where(g => g.PropertyId == propertyId && !g.IsDeleted);
+
+        if (excludeId.HasValue)
+        {
+            query = query.Where(g => g.Id != excludeId.Value);
+        }
+
+        var matched = await query.FirstOrDefaultAsync(g =>
+            g.Email.ToLower() == normEmail || g.Phone == normPhone,
+            cancellationToken);
+
+        if (matched == null)
+        {
+            return new DuplicateCheckResult(false, null);
+        }
+
+        var dto = new GuestDto(
+            matched.Id,
+            matched.FirstName,
+            matched.LastName,
+            matched.FirstName + " " + matched.LastName,
+            matched.Email,
+            matched.Phone,
+            matched.IdDocumentType,
+            matched.IdDocumentNumber,
+            matched.Nationality,
+            matched.VipStatus,
+            matched.TotalStays,
+            matched.LifetimeSpend,
+            matched.SpecialPreferences,
+            matched.City,
+            matched.Country,
+            matched.IsActive,
+            matched.Address
+        );
+
+        return new DuplicateCheckResult(true, dto);
     }
 
     #endregion

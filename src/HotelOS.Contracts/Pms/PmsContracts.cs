@@ -44,7 +44,9 @@ public record GuestDto(
     decimal LifetimeSpend,
     string? SpecialPreferences,
     string? City,
-    string? Country
+    string? Country,
+    bool IsActive = true,
+    string? Address = null
 );
 
 public record CreateGuestRequest(
@@ -60,6 +62,114 @@ public record CreateGuestRequest(
     string? Address = null,
     string? City = null,
     string? Country = null
+);
+
+public record UpdateGuestRequest(
+    string FirstName,
+    string LastName,
+    string Email,
+    string Phone,
+    string? IdDocumentType = null,
+    string? IdDocumentNumber = null,
+    string? Nationality = null,
+    string VipStatus = "Standard",
+    string? SpecialPreferences = null,
+    string? Address = null,
+    string? City = null,
+    string? Country = null,
+    bool IsActive = true
+);
+
+public record SetGuestStatusRequest(bool IsActive);
+
+public record GuestCrmProfileDto(
+    long Id,
+    string FirstName,
+    string LastName,
+    string FullName,
+    string Email,
+    string Phone,
+    string? IdDocumentType,
+    string? IdDocumentNumber,
+    string? Nationality,
+    string VipStatus,
+    string? SpecialPreferences,
+    string? Address,
+    string? City,
+    string? Country,
+    bool IsActive,
+    DateTimeOffset CreatedAt,
+    GuestCrmSummaryDto Summary,
+    List<ReservationDto> Reservations,
+    List<GuestStayHistoryDto> StayHistory,
+    List<GuestFolioSummaryDto> Folios,
+    List<GuestAuditEventDto> AuditLog
+);
+
+public record GuestCrmSummaryDto(
+    int TotalStays,
+    int UpcomingReservations,
+    int CompletedStays,
+    decimal TotalRevenue,
+    decimal OutstandingBalance,
+    string? LastStayDate,
+    double AverageStayDurationNights
+);
+
+public record GuestStayHistoryDto(
+    long ReservationId,
+    string ConfirmationNumber,
+    string RoomTypeCode,
+    string? RoomNumber,
+    string CheckInDate,
+    string CheckOutDate,
+    int Nights,
+    decimal TotalAmount,
+    string Status
+);
+
+public record GuestFolioSummaryDto(
+    long FolioId,
+    string FolioNumber,
+    string ReservationConfirmation,
+    string Status,
+    decimal TotalCharges,
+    decimal TotalPayments,
+    decimal Balance,
+    DateTimeOffset CreatedAt,
+    List<GuestFolioItemDto> Items
+);
+
+public record GuestFolioItemDto(
+    long Id,
+    string ItemType,
+    string DepartmentCode,
+    string Description,
+    decimal Amount,
+    string? PaymentModeCode,
+    string? TransactionReference,
+    DateTimeOffset PostedAt
+);
+
+public record GuestAuditEventDto(
+    string EventType,
+    string Description,
+    DateTimeOffset Timestamp,
+    string Actor
+);
+
+public record GuestCrmStatsDto(
+    int TotalCount,
+    int ActiveCount,
+    int VipCount,
+    int InactiveCount,
+    decimal TotalSpend,
+    decimal AverageSpend
+);
+
+public record DuplicateCheckResult(
+    bool IsDuplicate,
+    GuestDto? MatchedGuest
 );
 
 public record ReservationDto(
