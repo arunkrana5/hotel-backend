@@ -22,7 +22,7 @@ public class GuestOrderService : IGuestOrderService
         this._context = _context;
         var clientUrl = configuration["GuestPortal:BaseUrl"]
             ?? (!string.IsNullOrWhiteSpace(configuration["App:ClientUrl"]) ? $"{configuration["App:ClientUrl"]!.TrimEnd('/')}/guest/q" : null)
-            ?? "https://hotelapi-jass.onrender.com/guest/q";
+            ?? "https://hotal-dho2.onrender.com/guest/q";
         _guestBaseUrl = clientUrl;
     }
 

@@ -98,6 +98,21 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<HotelOS.Api.Hubs.NotificationHub>("/hubs/notifications");
 
+// Forward guest portal links to frontend UI
+app.MapGet("/guest/q/{token}", (string token, IConfiguration config) =>
+{
+    var clientBase = config["GuestPortal:BaseUrl"]
+        ?? (!string.IsNullOrWhiteSpace(config["App:ClientUrl"]) ? $"{config["App:ClientUrl"]!.TrimEnd('/')}/guest/q" : null)
+        ?? "https://hotal-dho2.onrender.com/guest/q";
+    return Results.Redirect($"{clientBase.TrimEnd('/')}/{token}", permanent: false);
+});
+
+app.MapGet("/guest/order/{orderNumber}", (string orderNumber, IConfiguration config) =>
+{
+    var clientUrl = config["App:ClientUrl"] ?? "https://hotal-dho2.onrender.com";
+    return Results.Redirect($"{clientUrl.TrimEnd('/')}/guest/order/{orderNumber}", permanent: false);
+});
+
 app.Run();
 
 public partial class Program { }
