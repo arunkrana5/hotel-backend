@@ -37,6 +37,7 @@ public static class DependencyInjection
         services.AddScoped<IPmsService, PmsService>();
         services.AddScoped<IHousekeepingService, HousekeepingService>();
         services.AddScoped<IRestaurantService, RestaurantService>();
+        services.AddScoped<IGuestOrderService, GuestOrderService>();
         services.AddScoped<IBanquetService, BanquetService>();
         services.AddScoped<IOperationsService, OperationsService>();
         services.AddScoped<IPurchaseService, PurchaseService>();

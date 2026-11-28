@@ -596,7 +596,14 @@ public class RestaurantService : IRestaurantService
                 i.TotalPrice,
                 i.Status,
                 i.Notes
-            )).ToList()
+            )).ToList(),
+            o.DeliveredAt,
+            o.Source,
+            o.DeliveryContactPhone,
+            o.GuestDisplayName,
+            o.IsStayVerified,
+            o.EstimatedDeliveryMinutes,
+            o.DeliveryStaffName
         );
     }
 }

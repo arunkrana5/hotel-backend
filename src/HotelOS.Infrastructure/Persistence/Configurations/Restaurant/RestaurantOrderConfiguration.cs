@@ -17,6 +17,10 @@ public class RestaurantOrderConfiguration : IEntityTypeConfiguration<RestaurantO
         builder.Property(o => o.PaymentStatus).HasMaxLength(32).IsRequired().HasDefaultValue("UNPAID");
         builder.Property(o => o.PaymentMethod).HasMaxLength(32);
         builder.Property(o => o.SpecialInstructions).HasMaxLength(500);
+        builder.Property(o => o.Source).HasMaxLength(32).IsRequired().HasDefaultValue("STAFF");
+        builder.Property(o => o.GuestDisplayName).HasMaxLength(150);
+        builder.Property(o => o.DeliveryContactPhone).HasMaxLength(32);
+        builder.Property(o => o.DeliveryStaffName).HasMaxLength(150);
 
         builder.Property(o => o.SubTotal).HasPrecision(18, 2);
         builder.Property(o => o.TaxAmount).HasPrecision(18, 2);

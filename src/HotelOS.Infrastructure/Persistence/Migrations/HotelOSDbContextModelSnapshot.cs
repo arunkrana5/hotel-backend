@@ -291,6 +291,137 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.ToTable("banquet_venues", "banquet");
                 });
 
+            modelBuilder.Entity("HotelOS.Domain.Configuration.Entities.DocumentNumberAudit", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DocumentNumber")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("DocumentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<long?>("EntityId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("EntityType")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTimeOffset>("GeneratedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("GeneratedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<long>("PropertyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentNumber");
+
+                    b.HasIndex("PropertyId", "DocumentType");
+
+                    b.ToTable("document_number_audits", "configuration");
+                });
+
+            modelBuilder.Entity("HotelOS.Domain.Configuration.Entities.DocumentNumberConfiguration", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<long>("CurrentSequence")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("DateFormat")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("DocumentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateOnly>("LastResetDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Module")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Prefix")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<long>("PropertyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ResetFrequency")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<int>("SequenceLength")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("StartingNumber")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Suffix")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PropertyId", "DocumentType")
+                        .IsUnique();
+
+                    b.ToTable("document_number_configurations", "configuration");
+                });
+
             modelBuilder.Entity("HotelOS.Domain.Configuration.Entities.DynamicFormDefinition", b =>
                 {
                     b.Property<long>("Id")
@@ -3943,6 +4074,106 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.ToTable("dining_tables", "restaurant");
                 });
 
+            modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.GuestOrderingSession", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EntrySource")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("GuestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("GuestName")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<string>("GuestPhone")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsStayVerified")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LastActivityAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("ModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<long>("PropertyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ReservationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RoomId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RoomQrCodeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("SessionToken")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("VerificationMode")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasDefaultValue("AUTO");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GuestId");
+
+                    b.HasIndex("ReservationId");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("RoomQrCodeId");
+
+                    b.HasIndex("SessionToken")
+                        .IsUnique();
+
+                    b.HasIndex("PropertyId", "RoomId");
+
+                    b.ToTable("guest_ordering_sessions", "restaurant");
+                });
+
             modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.MenuItem", b =>
                 {
                     b.Property<long>("Id")
@@ -4046,6 +4277,9 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<DateTimeOffset?>("AcceptedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -4058,6 +4292,17 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.Property<string>("DeletedBy")
                         .HasColumnType("text");
 
+                    b.Property<DateTimeOffset?>("DeliveredAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeliveryContactPhone")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<string>("DeliveryStaffName")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
                     b.Property<decimal>("DiscountAmount")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
@@ -4065,10 +4310,20 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.Property<string>("EntrySource")
                         .HasColumnType("text");
 
+                    b.Property<int?>("EstimatedDeliveryMinutes")
+                        .HasColumnType("integer");
+
                     b.Property<long?>("FolioId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("GuestDisplayName")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
                     b.Property<long?>("GuestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("GuestOrderingSessionId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("IpAddress")
@@ -4078,6 +4333,9 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsStayVerified")
                         .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("ModifiedAt")
@@ -4130,6 +4388,13 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.Property<DateTimeOffset?>("SettledAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasDefaultValue("STAFF");
+
                     b.Property<string>("SpecialInstructions")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
@@ -4161,6 +4426,8 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.HasIndex("FolioId");
 
                     b.HasIndex("GuestId");
+
+                    b.HasIndex("GuestOrderingSessionId");
 
                     b.HasIndex("OrderType");
 
@@ -4258,6 +4525,89 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.HasIndex("Status");
 
                     b.ToTable("restaurant_order_items", "restaurant");
+                });
+
+            modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.RoomQrCode", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EntrySource")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("GeneratedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("GeneratedByUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LastScannedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("ModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PinCode")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<long>("PropertyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("QrToken")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<bool>("RequirePin")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("RevokedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("RoomId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ScanCount")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QrToken")
+                        .IsUnique();
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("PropertyId", "RoomId");
+
+                    b.ToTable("room_qr_codes", "restaurant");
                 });
 
             modelBuilder.Entity("HotelOS.Domain.Security.Entities.IncidentReport", b =>
@@ -5296,6 +5646,39 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.Navigation("PurchaseRequisition");
                 });
 
+            modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.GuestOrderingSession", b =>
+                {
+                    b.HasOne("HotelOS.Domain.Pms.Entities.Guest", "Guest")
+                        .WithMany()
+                        .HasForeignKey("GuestId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("HotelOS.Domain.Pms.Entities.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("HotelOS.Domain.Pms.Entities.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelOS.Domain.Restaurant.Entities.RoomQrCode", "RoomQrCode")
+                        .WithMany()
+                        .HasForeignKey("RoomQrCodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Guest");
+
+                    b.Navigation("Reservation");
+
+                    b.Navigation("Room");
+
+                    b.Navigation("RoomQrCode");
+                });
+
             modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.RestaurantOrder", b =>
                 {
                     b.HasOne("HotelOS.Domain.Pms.Entities.Folio", "Folio")
@@ -5307,6 +5690,10 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("GuestId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("HotelOS.Domain.Restaurant.Entities.GuestOrderingSession", "GuestOrderingSession")
+                        .WithMany()
+                        .HasForeignKey("GuestOrderingSessionId");
 
                     b.HasOne("HotelOS.Domain.Pms.Entities.Room", "Room")
                         .WithMany()
@@ -5326,6 +5713,8 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.Navigation("Folio");
 
                     b.Navigation("Guest");
+
+                    b.Navigation("GuestOrderingSession");
 
                     b.Navigation("Room");
 
@@ -5351,6 +5740,17 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.Navigation("MenuItem");
 
                     b.Navigation("RestaurantOrder");
+                });
+
+            modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.RoomQrCode", b =>
+                {
+                    b.HasOne("HotelOS.Domain.Pms.Entities.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("HotelOS.Domain.Security.Entities.IncidentReport", b =>

@@ -406,6 +406,46 @@ public class DatabaseSeeder
                 });
                 await _context.SaveChangesAsync(cancellationToken);
             }
+
+            var restParent = await _context.NavigationMenus.FirstOrDefaultAsync(m => m.Code == "RESTAURANT" && m.ParentId == null, cancellationToken);
+            if (restParent != null)
+            {
+                bool changed = false;
+                if (!await _context.NavigationMenus.AnyAsync(m => m.Code == "POS_ROOM_ORDERS", cancellationToken))
+                {
+                    _context.NavigationMenus.Add(new NavigationMenu
+                    {
+                        ParentId = restParent.Id,
+                        Code = "POS_ROOM_ORDERS",
+                        Title = "Room Orders",
+                        Path = "/restaurant/room-orders",
+                        Module = "Restaurant",
+                        DisplayOrder = 4,
+                        IsActive = true,
+                        CreatedBy = "SYSTEM"
+                    });
+                    changed = true;
+                }
+                if (!await _context.NavigationMenus.AnyAsync(m => m.Code == "POS_ROOM_QR", cancellationToken))
+                {
+                    _context.NavigationMenus.Add(new NavigationMenu
+                    {
+                        ParentId = restParent.Id,
+                        Code = "POS_ROOM_QR",
+                        Title = "Room QR Management",
+                        Path = "/restaurant/qr",
+                        Module = "Restaurant",
+                        DisplayOrder = 5,
+                        IsActive = true,
+                        CreatedBy = "SYSTEM"
+                    });
+                    changed = true;
+                }
+                if (changed)
+                {
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+            }
             return;
         }
 
@@ -445,7 +485,9 @@ public class DatabaseSeeder
             {
                 new("POS_ORDER", "Live POS Terminal", "/restaurant/pos", 1),
                 new("POS_TABLES", "Table Management", "/restaurant/tables", 2),
-                new("POS_ITEMS", "Menu Items & Pricing", "/restaurant/items", 3)
+                new("POS_ITEMS", "Menu Items & Pricing", "/restaurant/items", 3),
+                new("POS_ROOM_ORDERS", "Room Orders", "/restaurant/room-orders", 4),
+                new("POS_ROOM_QR", "Room QR Management", "/restaurant/qr", 5)
             }),
 
             new("KITCHEN", "Kitchen (KDS)", "/kitchen", "Flame", "Kitchen", 7, null, new SubmenuSeedItem[]
@@ -1008,6 +1050,29 @@ public class DatabaseSeeder
                 _context.RestaurantOrders.Add(order);
                 await _context.SaveChangesAsync(cancellationToken);
             }
+        }
+
+        // 5b. Room QR Codes Seed
+        if (!await _context.RoomQrCodes.AnyAsync(cancellationToken))
+        {
+            var roomsToSeed = await _context.Rooms.Where(r => r.PropertyId == 1 && !r.IsDeleted).Take(30).ToListAsync(cancellationToken);
+            foreach (var r in roomsToSeed)
+            {
+                var tokenBytes = System.Security.Cryptography.RandomNumberGenerator.GetBytes(16);
+                var token = Convert.ToHexString(tokenBytes).ToLowerInvariant();
+                _context.RoomQrCodes.Add(new RoomQrCode
+                {
+                    PropertyId = 1,
+                    RoomId = r.Id,
+                    QrToken = token,
+                    RequirePin = false,
+                    IsActive = true,
+                    GeneratedAt = DateTimeOffset.UtcNow,
+                    CreatedAt = DateTimeOffset.UtcNow,
+                    CreatedBy = "SEEDER"
+                });
+            }
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         // 6. Banquet Venues & Bookings

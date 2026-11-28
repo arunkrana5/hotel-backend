@@ -27,9 +27,19 @@ public class RestaurantOrder : BaseEntity
     public long? ServerUserId { get; set; }
     public User? ServerUser { get; set; }
     public string? SpecialInstructions { get; set; }
+    public string Source { get; set; } = "STAFF"; // STAFF, GUEST_QR
+    public string? GuestDisplayName { get; set; }
+    public string? DeliveryContactPhone { get; set; }
+    public bool IsStayVerified { get; set; } = false;
+    public int? EstimatedDeliveryMinutes { get; set; }
+    public string? DeliveryStaffName { get; set; }
+    public long? GuestOrderingSessionId { get; set; }
+    public GuestOrderingSession? GuestOrderingSession { get; set; }
     public DateTimeOffset PlacedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset? AcceptedAt { get; set; }
     public DateTimeOffset? PreparedAt { get; set; }
     public DateTimeOffset? ServedAt { get; set; }
+    public DateTimeOffset? DeliveredAt { get; set; }
     public DateTimeOffset? SettledAt { get; set; }
     public ICollection<RestaurantOrderItem> Items { get; set; } = new List<RestaurantOrderItem>();
 }

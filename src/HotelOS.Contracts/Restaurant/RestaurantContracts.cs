@@ -88,7 +88,14 @@ public record RestaurantOrderDto(
     DateTimeOffset PlacedAt,
     DateTimeOffset? PreparedAt,
     DateTimeOffset? ServedAt,
-    List<RestaurantOrderItemDto> Items
+    List<RestaurantOrderItemDto> Items,
+    DateTimeOffset? DeliveredAt = null,
+    string? Source = null,
+    string? DeliveryContactPhone = null,
+    string? GuestDisplayName = null,
+    bool IsStayVerified = false,
+    int? EstimatedDeliveryMinutes = null,
+    string? DeliveryStaffName = null
 );
 
 public record CreateOrderItemRequest(

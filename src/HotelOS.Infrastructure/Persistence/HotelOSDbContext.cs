@@ -82,6 +82,8 @@ public class HotelOSDbContext : DbContext
     public DbSet<MenuItem> MenuItems => Set<MenuItem>();
     public DbSet<RestaurantOrder> RestaurantOrders => Set<RestaurantOrder>();
     public DbSet<RestaurantOrderItem> RestaurantOrderItems => Set<RestaurantOrderItem>();
+    public DbSet<RoomQrCode> RoomQrCodes => Set<RoomQrCode>();
+    public DbSet<GuestOrderingSession> GuestOrderingSessions => Set<GuestOrderingSession>();
 
     // Banquet schema
     public DbSet<BanquetVenue> BanquetVenues => Set<BanquetVenue>();
