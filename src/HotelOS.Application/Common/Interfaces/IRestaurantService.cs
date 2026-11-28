@@ -5,6 +5,68 @@ namespace HotelOS.Application.Common.Interfaces;
 
 public interface IRestaurantService
 {
+    // Menus
+    Task<List<MenuDto>> GetMenusAsync(
+        long propertyId = 1,
+        string? status = null,
+        CancellationToken cancellationToken = default);
+
+    Task<MenuDto?> GetMenuByIdAsync(
+        long id,
+        CancellationToken cancellationToken = default);
+
+    Task<MenuDto> CreateMenuAsync(
+        CreateMenuRequest request,
+        long propertyId,
+        string createdBy,
+        CancellationToken cancellationToken = default);
+
+    Task<MenuDto?> UpdateMenuAsync(
+        long id,
+        UpdateMenuRequest request,
+        string updatedBy,
+        CancellationToken cancellationToken = default);
+
+    Task<MenuDto?> ToggleMenuStatusAsync(
+        long id,
+        string status,
+        string updatedBy,
+        CancellationToken cancellationToken = default);
+
+    Task<MenuDto?> DuplicateMenuAsync(
+        long id,
+        string createdBy,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> DeleteMenuAsync(
+        long id,
+        string deletedBy,
+        CancellationToken cancellationToken = default);
+
+    // Categories
+    Task<List<MenuCategoryDto>> GetCategoriesAsync(
+        long propertyId = 1,
+        long? menuId = null,
+        CancellationToken cancellationToken = default);
+
+    Task<MenuCategoryDto> CreateCategoryAsync(
+        CreateMenuCategoryRequest request,
+        long propertyId,
+        string createdBy,
+        CancellationToken cancellationToken = default);
+
+    Task<MenuCategoryDto?> UpdateCategoryAsync(
+        long id,
+        UpdateMenuCategoryRequest request,
+        string updatedBy,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> DeleteCategoryAsync(
+        long id,
+        string deletedBy,
+        CancellationToken cancellationToken = default);
+
+    // Tables
     Task<List<DiningTableDto>> GetTablesAsync(
         long propertyId = 1,
         string? section = null,
@@ -17,10 +79,12 @@ public interface IRestaurantService
         string updatedBy,
         CancellationToken cancellationToken = default);
 
+    // Menu Items
     Task<List<MenuItemDto>> GetMenuItemsAsync(
         long propertyId = 1,
         string? category = null,
         bool? isAvailableOnly = null,
+        long? menuId = null,
         CancellationToken cancellationToken = default);
 
     Task<MenuItemDto> CreateMenuItemAsync(
@@ -41,6 +105,12 @@ public interface IRestaurantService
         string updatedBy,
         CancellationToken cancellationToken = default);
 
+    Task<bool> DeleteMenuItemAsync(
+        long id,
+        string deletedBy,
+        CancellationToken cancellationToken = default);
+
+    // Orders
     Task<PagedResult<RestaurantOrderDto>> GetOrdersPagedAsync(
         long propertyId = 1,
         int page = 1,

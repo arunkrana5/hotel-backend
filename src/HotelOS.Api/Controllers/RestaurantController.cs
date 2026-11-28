@@ -47,15 +47,174 @@ public class RestaurantController : ControllerBase
         return Ok(ApiResponse<DiningTableDto>.Ok(result, "Table status updated."));
     }
 
+    #region Menus & Schedules
+
+    [HttpGet("menus")]
+    public async Task<IActionResult> GetMenus(
+        [FromQuery] string? status = null,
+        CancellationToken cancellationToken = default)
+    {
+        long propertyId = _currentUser.PropertyId ?? 1;
+        var result = await _restaurantService.GetMenusAsync(propertyId, status, cancellationToken);
+        return Ok(ApiResponse<List<MenuDto>>.Ok(result));
+    }
+
+    [HttpGet("menus/{id:long}")]
+    public async Task<IActionResult> GetMenuById(
+        [FromRoute] long id,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await _restaurantService.GetMenuByIdAsync(id, cancellationToken);
+        if (result == null)
+            return NotFound(ApiResponse.FailMessage($"Menu #{id} not found.", 404));
+
+        return Ok(ApiResponse<MenuDto>.Ok(result));
+    }
+
+    [HttpPost("menus")]
+    public async Task<IActionResult> CreateMenu(
+        [FromBody] CreateMenuRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        long propertyId = _currentUser.PropertyId ?? 1;
+        string user = _currentUser.Username ?? "SYSTEM";
+        var result = await _restaurantService.CreateMenuAsync(request, propertyId, user, cancellationToken);
+        return Ok(ApiResponse<MenuDto>.Ok(result, "Menu created successfully."));
+    }
+
+    [HttpPut("menus/{id:long}")]
+    public async Task<IActionResult> UpdateMenu(
+        [FromRoute] long id,
+        [FromBody] HotelOS.Contracts.Restaurant.UpdateMenuRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var result = await _restaurantService.UpdateMenuAsync(id, request, user, cancellationToken);
+        if (result == null)
+            return NotFound(ApiResponse.FailMessage($"Menu #{id} not found.", 404));
+
+        return Ok(ApiResponse<MenuDto>.Ok(result, "Menu updated successfully."));
+    }
+
+    public record UpdateMenuStatusRequest(string Status);
+
+    [HttpPut("menus/{id:long}/status")]
+    public async Task<IActionResult> ToggleMenuStatus(
+        [FromRoute] long id,
+        [FromBody] UpdateMenuStatusRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var result = await _restaurantService.ToggleMenuStatusAsync(id, request.Status, user, cancellationToken);
+        if (result == null)
+            return NotFound(ApiResponse.FailMessage($"Menu #{id} not found.", 404));
+
+        return Ok(ApiResponse<MenuDto>.Ok(result, "Menu status updated."));
+    }
+
+    [HttpPost("menus/{id:long}/duplicate")]
+    public async Task<IActionResult> DuplicateMenu(
+        [FromRoute] long id,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var result = await _restaurantService.DuplicateMenuAsync(id, user, cancellationToken);
+        if (result == null)
+            return NotFound(ApiResponse.FailMessage($"Source Menu #{id} not found.", 404));
+
+        return Ok(ApiResponse<MenuDto>.Ok(result, "Menu duplicated successfully."));
+    }
+
+    [HttpDelete("menus/{id:long}")]
+    public async Task<IActionResult> DeleteMenu(
+        [FromRoute] long id,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var success = await _restaurantService.DeleteMenuAsync(id, user, cancellationToken);
+        if (!success)
+            return NotFound(ApiResponse.FailMessage($"Menu #{id} not found.", 404));
+
+        return Ok(ApiResponse.OkMessage("Menu deleted successfully."));
+    }
+
+    #endregion
+
+    #region Categories
+
+    [HttpGet("categories")]
+    public async Task<IActionResult> GetCategories(
+        [FromQuery] long? menuId = null,
+        CancellationToken cancellationToken = default)
+    {
+        long propertyId = _currentUser.PropertyId ?? 1;
+        var result = await _restaurantService.GetCategoriesAsync(propertyId, menuId, cancellationToken);
+        return Ok(ApiResponse<List<MenuCategoryDto>>.Ok(result));
+    }
+
+    [HttpPost("categories")]
+    public async Task<IActionResult> CreateCategory(
+        [FromBody] CreateMenuCategoryRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        long propertyId = _currentUser.PropertyId ?? 1;
+        string user = _currentUser.Username ?? "SYSTEM";
+        var result = await _restaurantService.CreateCategoryAsync(request, propertyId, user, cancellationToken);
+        return Ok(ApiResponse<MenuCategoryDto>.Ok(result, "Category created successfully."));
+    }
+
+    [HttpPut("categories/{id:long}")]
+    public async Task<IActionResult> UpdateCategory(
+        [FromRoute] long id,
+        [FromBody] UpdateMenuCategoryRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var result = await _restaurantService.UpdateCategoryAsync(id, request, user, cancellationToken);
+        if (result == null)
+            return NotFound(ApiResponse.FailMessage($"Category #{id} not found.", 404));
+
+        return Ok(ApiResponse<MenuCategoryDto>.Ok(result, "Category updated successfully."));
+    }
+
+    [HttpDelete("categories/{id:long}")]
+    public async Task<IActionResult> DeleteCategory(
+        [FromRoute] long id,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var success = await _restaurantService.DeleteCategoryAsync(id, user, cancellationToken);
+        if (!success)
+            return NotFound(ApiResponse.FailMessage($"Category #{id} not found.", 404));
+
+        return Ok(ApiResponse.OkMessage("Category deleted successfully."));
+    }
+
+    #endregion
+
     [HttpGet("menu")]
     public async Task<IActionResult> GetMenuItems(
         [FromQuery] string? category = null,
         [FromQuery] bool? isAvailableOnly = null,
+        [FromQuery] long? menuId = null,
         CancellationToken cancellationToken = default)
     {
         long propertyId = _currentUser.PropertyId ?? 1;
-        var result = await _restaurantService.GetMenuItemsAsync(propertyId, category, isAvailableOnly, cancellationToken);
+        var result = await _restaurantService.GetMenuItemsAsync(propertyId, category, isAvailableOnly, menuId, cancellationToken);
         return Ok(ApiResponse<List<MenuItemDto>>.Ok(result));
+    }
+
+    [HttpDelete("menu/{id:long}")]
+    public async Task<IActionResult> DeleteMenuItem(
+        [FromRoute] long id,
+        CancellationToken cancellationToken = default)
+    {
+        string user = _currentUser.Username ?? "SYSTEM";
+        var success = await _restaurantService.DeleteMenuItemAsync(id, user, cancellationToken);
+        if (!success)
+            return NotFound(ApiResponse.FailMessage($"Menu item #{id} not found.", 404));
+
+        return Ok(ApiResponse.OkMessage("Menu item deleted successfully."));
     }
 
     [HttpPost("menu")]

@@ -4174,6 +4174,212 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.ToTable("guest_ordering_sessions", "restaurant");
                 });
 
+            modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.Menu", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ApplicableOutlets")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasDefaultValue("ROOM_SERVICE,MAIN_RESTAURANT");
+
+                    b.Property<string>("AvailableDays")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasDefaultValue("MON,TUE,WED,THU,FRI,SAT,SUN");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int>("DisplayPriority")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("EffectiveFrom")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("EffectiveUntil")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<TimeSpan?>("EndTime")
+                        .HasColumnType("interval");
+
+                    b.Property<string>("EntrySource")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsGuestVisible")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("MenuCode")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("MenuName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<string>("MenuType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasDefaultValue("ALL_DAY");
+
+                    b.Property<DateTimeOffset?>("ModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<long>("PropertyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<TimeSpan?>("StartTime")
+                        .HasColumnType("interval");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasDefaultValue("PUBLISHED");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsGuestVisible");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("PropertyId", "MenuCode")
+                        .IsUnique();
+
+                    b.ToTable("menus", "restaurant");
+                });
+
+            modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.MenuCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ApplicableOutlets")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasDefaultValue("ROOM_SERVICE,MAIN_RESTAURANT");
+
+                    b.Property<string>("CategoryCode")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("EntrySource")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsGuestVisible")
+                        .HasColumnType("boolean");
+
+                    b.Property<long?>("MenuId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("ModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<long>("PropertyId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DisplayOrder");
+
+                    b.HasIndex("IsGuestVisible");
+
+                    b.HasIndex("MenuId");
+
+                    b.HasIndex("PropertyId", "CategoryCode")
+                        .IsUnique();
+
+                    b.ToTable("menu_categories", "restaurant");
+                });
+
             modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.MenuItem", b =>
                 {
                     b.Property<long>("Id")
@@ -4181,6 +4387,20 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("AddOnsJson")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Allergens")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<string>("ApplicableOutlets")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasDefaultValue("ROOM_SERVICE,MAIN_RESTAURANT");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -4212,6 +4432,9 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(32)")
                         .HasDefaultValue("VEG");
 
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
                     b.Property<string>("EntrySource")
                         .HasColumnType("text");
 
@@ -4231,6 +4454,12 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsGuestVisible")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("ItemCode")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -4240,6 +4469,12 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
+
+                    b.Property<long?>("MenuCategoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("MenuId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
@@ -4257,11 +4492,35 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.Property<long>("PropertyId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasDefaultValue("PUBLISHED");
+
+                    b.Property<decimal>("TaxPercent")
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)")
+                        .HasDefaultValue(5.0m);
+
+                    b.Property<string>("VariantsJson")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Category");
 
                     b.HasIndex("IsAvailable");
+
+                    b.HasIndex("IsFeatured");
+
+                    b.HasIndex("IsGuestVisible");
+
+                    b.HasIndex("MenuCategoryId");
+
+                    b.HasIndex("MenuId");
 
                     b.HasIndex("PropertyId", "ItemCode")
                         .IsUnique();
@@ -4453,6 +4712,10 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<decimal>("BasePrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -4495,11 +4758,21 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
 
+                    b.Property<decimal>("OptionsPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
                     b.Property<long>("RestaurantOrderId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("SelectedAddOnsJson")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SelectedVariantsJson")
+                        .HasColumnType("text");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -5679,6 +5952,33 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                     b.Navigation("RoomQrCode");
                 });
 
+            modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.MenuCategory", b =>
+                {
+                    b.HasOne("HotelOS.Domain.Restaurant.Entities.Menu", "Menu")
+                        .WithMany("Categories")
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Menu");
+                });
+
+            modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.MenuItem", b =>
+                {
+                    b.HasOne("HotelOS.Domain.Restaurant.Entities.MenuCategory", "MenuCategory")
+                        .WithMany("Items")
+                        .HasForeignKey("MenuCategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("HotelOS.Domain.Restaurant.Entities.Menu", "Menu")
+                        .WithMany("Items")
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Menu");
+
+                    b.Navigation("MenuCategory");
+                });
+
             modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.RestaurantOrder", b =>
                 {
                     b.HasOne("HotelOS.Domain.Pms.Entities.Folio", "Folio")
@@ -5938,6 +6238,18 @@ namespace HotelOS.Infrastructure.Persistence.Migrations
                 });
 
             modelBuilder.Entity("HotelOS.Domain.Purchase.Entities.PurchaseRequisition", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.Menu", b =>
+                {
+                    b.Navigation("Categories");
+
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("HotelOS.Domain.Restaurant.Entities.MenuCategory", b =>
                 {
                     b.Navigation("Items");
                 });

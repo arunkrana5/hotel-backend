@@ -652,8 +652,10 @@ public class GuestOrderService : IGuestOrderService
         session.LastActivityAt = DateTimeOffset.UtcNow;
 
         var query = _context.MenuItems
+            .Include(m => m.Menu)
+            .Include(m => m.MenuCategory)
             .AsNoTracking()
-            .Where(m => m.PropertyId == session.PropertyId && m.IsActive && !m.IsDeleted && m.IsAvailable);
+            .Where(m => m.PropertyId == session.PropertyId && m.IsActive && !m.IsDeleted && m.IsAvailable && m.IsGuestVisible && m.Status == "PUBLISHED");
 
         if (!string.IsNullOrWhiteSpace(category) && category.Trim().ToUpperInvariant() != "ALL")
         {
@@ -661,11 +663,42 @@ public class GuestOrderService : IGuestOrderService
         }
 
         var items = await query
-            .OrderBy(m => m.Category)
+            .OrderBy(m => m.DisplayOrder)
+            .ThenBy(m => m.Category)
             .ThenBy(m => m.ItemName)
             .ToListAsync(cancellationToken);
 
-        return items.Select(m => new MenuItemDto(
+        // Filter by menu schedule if assigned to a specific scheduled menu
+        var currentDay = DateTimeOffset.UtcNow.DayOfWeek.ToString()[..3].ToUpperInvariant();
+        var currentTime = DateTimeOffset.UtcNow.TimeOfDay;
+
+        var activeItems = items.Where(m =>
+        {
+            if (m.Menu == null) return true;
+            if (m.Menu.Status != "PUBLISHED" || !m.Menu.IsGuestVisible) return false;
+
+            if (!string.IsNullOrWhiteSpace(m.Menu.AvailableDays) && !m.Menu.AvailableDays.Contains(currentDay, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if (m.Menu.StartTime.HasValue && m.Menu.EndTime.HasValue)
+            {
+                if (m.Menu.StartTime.Value <= m.Menu.EndTime.Value)
+                {
+                    if (currentTime < m.Menu.StartTime.Value || currentTime > m.Menu.EndTime.Value)
+                        return false;
+                }
+                else
+                {
+                    // Midnight-crossing schedule (e.g. 22:00 to 06:00)
+                    if (currentTime < m.Menu.StartTime.Value && currentTime > m.Menu.EndTime.Value)
+                        return false;
+                }
+            }
+
+            return true;
+        }).ToList();
+
+        return activeItems.Select(m => new MenuItemDto(
             m.Id,
             m.ItemCode,
             m.ItemName,
@@ -675,7 +708,20 @@ public class GuestOrderService : IGuestOrderService
             m.PreparationTimeMinutes,
             m.DietaryType,
             m.IsAvailable,
-            m.ImageUrl
+            m.ImageUrl,
+            m.MenuId,
+            m.Menu?.MenuName,
+            m.MenuCategoryId,
+            m.MenuCategory?.CategoryName,
+            m.IsGuestVisible,
+            m.IsFeatured,
+            m.DisplayOrder,
+            m.TaxPercent,
+            m.Status,
+            m.Allergens,
+            m.VariantsJson,
+            m.AddOnsJson,
+            m.ApplicableOutlets
         )).ToList();
     }
 
@@ -722,7 +768,8 @@ public class GuestOrderService : IGuestOrderService
                 throw new InvalidOperationException($"'{menuItem.ItemName}' is currently out of stock.");
             }
 
-            var lineTotal = reqItem.Quantity * menuItem.Price;
+            var unitPrice = menuItem.Price + reqItem.OptionsPrice;
+            var lineTotal = reqItem.Quantity * unitPrice;
             subtotal += lineTotal;
 
             orderItems.Add(new RestaurantOrderItem
@@ -730,10 +777,14 @@ public class GuestOrderService : IGuestOrderService
                 MenuItemId = menuItem.Id,
                 ItemName = menuItem.ItemName,
                 Quantity = reqItem.Quantity,
-                UnitPrice = menuItem.Price,
+                UnitPrice = unitPrice,
+                BasePrice = menuItem.Price,
+                OptionsPrice = reqItem.OptionsPrice,
                 TotalPrice = lineTotal,
                 Status = "QUEUED",
                 Notes = reqItem.Notes?.Trim(),
+                SelectedVariantsJson = reqItem.SelectedVariantsJson,
+                SelectedAddOnsJson = reqItem.SelectedAddOnsJson,
                 CreatedAt = DateTimeOffset.UtcNow,
                 CreatedBy = "GUEST_QR"
             });
@@ -850,7 +901,11 @@ public class GuestOrderService : IGuestOrderService
                 i.UnitPrice,
                 i.TotalPrice,
                 i.Status,
-                i.Notes
+                i.Notes,
+                i.SelectedVariantsJson,
+                i.SelectedAddOnsJson,
+                i.BasePrice,
+                i.OptionsPrice
             )).ToList()
         );
     }

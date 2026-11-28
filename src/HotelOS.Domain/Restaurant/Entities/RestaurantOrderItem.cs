@@ -11,7 +11,11 @@ public class RestaurantOrderItem : BaseEntity
     public string ItemName { get; set; } = string.Empty;
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
+    public decimal BasePrice { get; set; }
+    public decimal OptionsPrice { get; set; }
     public decimal TotalPrice { get; set; }
     public string Status { get; set; } = "QUEUED"; // QUEUED, PREPARING, READY, SERVED
     public string? Notes { get; set; }
+    public string? SelectedVariantsJson { get; set; }
+    public string? SelectedAddOnsJson { get; set; }
 }

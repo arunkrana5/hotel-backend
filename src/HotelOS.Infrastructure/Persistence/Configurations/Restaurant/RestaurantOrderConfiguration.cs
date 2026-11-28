@@ -72,9 +72,13 @@ public class RestaurantOrderItemConfiguration : IEntityTypeConfiguration<Restaur
 
         builder.Property(i => i.ItemName).HasMaxLength(150).IsRequired();
         builder.Property(i => i.UnitPrice).HasPrecision(18, 2);
+        builder.Property(i => i.BasePrice).HasPrecision(18, 2);
+        builder.Property(i => i.OptionsPrice).HasPrecision(18, 2);
         builder.Property(i => i.TotalPrice).HasPrecision(18, 2);
         builder.Property(i => i.Status).HasMaxLength(32).IsRequired().HasDefaultValue("QUEUED");
         builder.Property(i => i.Notes).HasMaxLength(300);
+        builder.Property(i => i.SelectedVariantsJson).HasColumnType("text");
+        builder.Property(i => i.SelectedAddOnsJson).HasColumnType("text");
 
         builder.HasIndex(i => i.RestaurantOrderId);
         builder.HasIndex(i => i.Status);
