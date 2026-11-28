@@ -1006,17 +1006,20 @@ public class DatabaseSeeder
         if (!await _context.MenuItems.AnyAsync(cancellationToken))
         {
             _context.MenuItems.AddRange(
-                new MenuItem { PropertyId = 1, ItemCode = "MNU-APP-01", ItemName = "Crispy Calamari Fritti", Category = "APPETIZERS", Description = "Tender calamari with saffron garlic aioli and charred lemon", Price = 18.50m, PreparationTimeMinutes = 12, DietaryType = "NON_VEG", IsAvailable = true, CreatedBy = "SYSTEM" },
-                new MenuItem { PropertyId = 1, ItemCode = "MNU-APP-02", ItemName = "Heirloom Tomato & Burrata", Category = "APPETIZERS", Description = "Artisanal pugliese burrata, aged balsamic, micro basil, and focaccia crisps", Price = 16.00m, PreparationTimeMinutes = 10, DietaryType = "VEG", IsAvailable = true, CreatedBy = "SYSTEM" },
-                new MenuItem { PropertyId = 1, ItemCode = "MNU-MAIN-01", ItemName = "Pan-Seared Atlantic Halibut", Category = "MAINS", Description = "Wild caught halibut with butter-poached leeks and white wine reduction", Price = 38.00m, PreparationTimeMinutes = 20, DietaryType = "NON_VEG", IsAvailable = true, CreatedBy = "SYSTEM" },
-                new MenuItem { PropertyId = 1, ItemCode = "MNU-MAIN-02", ItemName = "Prime Australian Wagyu Burger", Category = "MAINS", Description = "Brioche bun, truffled cheddar, caramelized shallots, and hand-cut fries", Price = 28.50m, PreparationTimeMinutes = 15, DietaryType = "NON_VEG", IsAvailable = true, CreatedBy = "SYSTEM" },
-                new MenuItem { PropertyId = 1, ItemCode = "MNU-MAIN-03", ItemName = "Truffle & Wild Mushroom Risotto", Category = "MAINS", Description = "Carnaroli rice, foraged forest mushrooms, black truffle butter, and 24-month parmesan", Price = 26.00m, PreparationTimeMinutes = 18, DietaryType = "VEG", IsAvailable = true, CreatedBy = "SYSTEM" },
-                new MenuItem { PropertyId = 1, ItemCode = "MNU-PIZ-01", ItemName = "Artisanal Margherita Bufala", Category = "BREADS", Description = "San Marzano tomatoes, mozzarella di bufala, fresh basil, and extra virgin olive oil", Price = 22.00m, PreparationTimeMinutes = 14, DietaryType = "VEG", IsAvailable = true, CreatedBy = "SYSTEM" },
-                new MenuItem { PropertyId = 1, ItemCode = "MNU-DES-01", ItemName = "Classic Espresso Tiramisu", Category = "DESSERTS", Description = "Savoiardi ladyfingers, Illy espresso liqueur, and mascarpone mousse", Price = 12.50m, PreparationTimeMinutes = 8, DietaryType = "VEG", IsAvailable = true, CreatedBy = "SYSTEM" },
-                new MenuItem { PropertyId = 1, ItemCode = "MNU-DRK-01", ItemName = "Smoked Rosemary Old Fashioned", Category = "COCKTAILS", Description = "Woodford Reserve bourbon, bitters, torch-smoked organic rosemary sprig", Price = 19.00m, PreparationTimeMinutes = 6, DietaryType = "VEGAN", IsAvailable = true, CreatedBy = "SYSTEM" }
+                new MenuItem { PropertyId = 1, ItemCode = "MNU-APP-01", ItemName = "Crispy Calamari Fritti", Category = "STARTERS", Description = "Tender calamari with saffron garlic aioli and charred lemon", Price = 18.50m, PreparationTimeMinutes = 12, DietaryType = "NON_VEG", IsAvailable = true, IsGuestVisible = true, Status = "PUBLISHED", CreatedBy = "SYSTEM" },
+                new MenuItem { PropertyId = 1, ItemCode = "MNU-APP-02", ItemName = "Heirloom Tomato & Burrata", Category = "STARTERS", Description = "Artisanal pugliese burrata, aged balsamic, micro basil, and focaccia crisps", Price = 16.00m, PreparationTimeMinutes = 10, DietaryType = "VEG", IsAvailable = true, IsGuestVisible = true, Status = "PUBLISHED", CreatedBy = "SYSTEM" },
+                new MenuItem { PropertyId = 1, ItemCode = "MNU-MAIN-01", ItemName = "Pan-Seared Atlantic Halibut", Category = "MAINS", Description = "Wild caught halibut with butter-poached leeks and white wine reduction", Price = 38.00m, PreparationTimeMinutes = 20, DietaryType = "NON_VEG", IsAvailable = true, IsGuestVisible = true, Status = "PUBLISHED", CreatedBy = "SYSTEM" },
+                new MenuItem { PropertyId = 1, ItemCode = "MNU-MAIN-02", ItemName = "Prime Australian Wagyu Burger", Category = "MAINS", Description = "Brioche bun, truffled cheddar, caramelized shallots, and hand-cut fries", Price = 28.50m, PreparationTimeMinutes = 15, DietaryType = "NON_VEG", IsAvailable = true, IsGuestVisible = true, Status = "PUBLISHED", CreatedBy = "SYSTEM" },
+                new MenuItem { PropertyId = 1, ItemCode = "MNU-MAIN-03", ItemName = "Truffle & Wild Mushroom Risotto", Category = "MAINS", Description = "Carnaroli rice, foraged forest mushrooms, black truffle butter, and 24-month parmesan", Price = 26.00m, PreparationTimeMinutes = 18, DietaryType = "VEG", IsAvailable = true, IsGuestVisible = true, Status = "PUBLISHED", CreatedBy = "SYSTEM" },
+                new MenuItem { PropertyId = 1, ItemCode = "MNU-PIZ-01", ItemName = "Artisanal Margherita Bufala", Category = "BREADS", Description = "San Marzano tomatoes, mozzarella di bufala, fresh basil, and extra virgin olive oil", Price = 22.00m, PreparationTimeMinutes = 14, DietaryType = "VEG", IsAvailable = true, IsGuestVisible = true, Status = "PUBLISHED", CreatedBy = "SYSTEM" },
+                new MenuItem { PropertyId = 1, ItemCode = "MNU-DES-01", ItemName = "Classic Espresso Tiramisu", Category = "DESSERTS", Description = "Savoiardi ladyfingers, Illy espresso liqueur, and mascarpone mousse", Price = 12.50m, PreparationTimeMinutes = 8, DietaryType = "VEG", IsAvailable = true, IsGuestVisible = true, Status = "PUBLISHED", CreatedBy = "SYSTEM" },
+                new MenuItem { PropertyId = 1, ItemCode = "MNU-DRK-01", ItemName = "Smoked Rosemary Old Fashioned", Category = "BEVERAGES", Description = "Woodford Reserve bourbon, bitters, torch-smoked organic rosemary sprig", Price = 19.00m, PreparationTimeMinutes = 6, DietaryType = "VEGAN", IsAvailable = true, IsGuestVisible = true, Status = "PUBLISHED", CreatedBy = "SYSTEM" }
             );
             await _context.SaveChangesAsync(cancellationToken);
         }
+
+        // 4b. Dynamic Guest Menus, Categories & Indian Cuisine Collection
+        await SeedIndianMenuAndCategoriesAsync(cancellationToken);
 
         // 5. Active Restaurant & KDS Orders
         if (!await _context.RestaurantOrders.AnyAsync(cancellationToken))
@@ -1215,6 +1218,886 @@ public class DatabaseSeeder
                 });
             }
 
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+    }
+
+    private async Task SeedIndianMenuAndCategoriesAsync(CancellationToken cancellationToken)
+    {
+        // 1. Ensure Default Published Guest Menu exists
+        var allDayMenu = await _context.Menus.FirstOrDefaultAsync(m => m.PropertyId == 1 && m.MenuCode == "MNU-ALLDAY", cancellationToken);
+        if (allDayMenu == null)
+        {
+            allDayMenu = new Menu
+            {
+                PropertyId = 1,
+                MenuCode = "MNU-ALLDAY",
+                MenuName = "All-Day Dining & In-Room Service",
+                Description = "Authentic Indian delicacies, global favorites, tandoori specialties, and refreshing beverages.",
+                MenuType = "ALL_DAY",
+                Status = "PUBLISHED",
+                IsGuestVisible = true,
+                DisplayPriority = 1,
+                AvailableDays = "MON,TUE,WED,THU,FRI,SAT,SUN",
+                ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                CreatedBy = "SYSTEM"
+            };
+            _context.Menus.Add(allDayMenu);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        // 2. Ensure Categories exist and link to Menu
+        var categoryDefs = new (string Code, string Name, string Desc, int Order, string Img)[]
+        {
+            ("STARTERS", "Tandoori Starters & Appetizers", "Clay oven roasted tikkas, kebabs, and crispy bites", 1, "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&auto=format&fit=crop"),
+            ("MAINS", "Royal Curries & Main Course", "Slow-cooked royal gravies, paneer specialties, and aromatic curries", 2, "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&auto=format&fit=crop"),
+            ("BIRYANIS", "Dum Biryanis & Rice", "Fragrant dum cooked long-grain basmati rice and rich handi biryanis", 3, "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&auto=format&fit=crop"),
+            ("BREADS", "Artisanal Indian Breads", "Freshly baked tandoori naans, rotis, and flaky laccha parathas", 4, "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop"),
+            ("DESSERTS", "Mithai & Traditional Desserts", "Classic Indian sweets, warm gulab jamuns, and chilled rasmalai", 5, "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop"),
+            ("BEVERAGES", "Beverages & Refreshers", "Masala chai, royal mango lassis, and handcrafted coolers", 6, "https://images.unsplash.com/photo-1556881286-fc6915169721?w=600&auto=format&fit=crop")
+        };
+
+        var catMap = new Dictionary<string, MenuCategory>();
+        foreach (var def in categoryDefs)
+        {
+            var cat = await _context.MenuCategories.FirstOrDefaultAsync(c => c.PropertyId == 1 && c.CategoryCode == def.Code, cancellationToken);
+            if (cat == null)
+            {
+                cat = new MenuCategory
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    CategoryCode = def.Code,
+                    CategoryName = def.Name,
+                    Description = def.Desc,
+                    ImageUrl = def.Img,
+                    DisplayOrder = def.Order,
+                    IsGuestVisible = true,
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                };
+                _context.MenuCategories.Add(cat);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+            catMap[def.Code] = cat;
+        }
+
+        // 3. Ensure existing menu items are visible and mapped
+        var existingItems = await _context.MenuItems.Where(m => m.PropertyId == 1).ToListAsync(cancellationToken);
+        foreach (var item in existingItems)
+        {
+            item.IsGuestVisible = true;
+            item.Status = "PUBLISHED";
+            item.IsAvailable = true;
+            if (item.MenuId == null) item.MenuId = allDayMenu.Id;
+            if (item.MenuCategoryId == null && catMap.TryGetValue(item.Category, out var c))
+            {
+                item.MenuCategoryId = c.Id;
+            }
+        }
+        await _context.SaveChangesAsync(cancellationToken);
+
+        // 4. Seed 28 Authentic Indian Food Items if not present
+        if (!await _context.MenuItems.AnyAsync(m => m.ItemCode == "MNU-IND-STR-01", cancellationToken))
+        {
+            var indianDishes = new List<MenuItem>
+            {
+                // --- STARTERS ---
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["STARTERS"].Id,
+                    ItemCode = "MNU-IND-STR-01",
+                    ItemName = "Paneer Tikka Angaare",
+                    Category = "STARTERS",
+                    Description = "Fresh cottage cheese cubes marinated in Kashmiri deggi mirch, hung curd, and stone-ground spices, flame-roasted in clay tandoor.",
+                    Price = 380.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 18,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    IsFeatured = true,
+                    DisplayOrder = 1,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy",
+                    VariantsJson = "[{\"groupName\":\"Portion\",\"options\":[{\"name\":\"Full (6 Pcs)\",\"price\":380},{\"name\":\"Half (3 Pcs)\",\"price\":210}]}]",
+                    AddOnsJson = "[{\"name\":\"Extra Mint Chutney\",\"price\":30},{\"name\":\"Masala Laccha Pyaz\",\"price\":25}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["STARTERS"].Id,
+                    ItemCode = "MNU-IND-STR-02",
+                    ItemName = "Murgh Malai Tikka",
+                    Category = "STARTERS",
+                    Description = "Tender boneless chicken morsels steeped overnight in cashew cream, green cardamom, and melted cheese glaze, char-grilled to perfection.",
+                    Price = 460.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 20,
+                    DietaryType = "NON_VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    IsFeatured = true,
+                    DisplayOrder = 2,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy, Cashew Nuts",
+                    VariantsJson = "[{\"groupName\":\"Portion\",\"options\":[{\"name\":\"Full (6 Pcs)\",\"price\":460},{\"name\":\"Half (3 Pcs)\",\"price\":260}]}]",
+                    AddOnsJson = "[{\"name\":\"Extra Garlic Aioli Dip\",\"price\":40}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["STARTERS"].Id,
+                    ItemCode = "MNU-IND-STR-03",
+                    ItemName = "Tandoori Soya Chaap",
+                    Category = "STARTERS",
+                    Description = "Juicy soya chaap skewers marinated in kachhi ghani mustard oil, ajwain, and Rajasthani red chili masala, smoked crisp.",
+                    Price = 340.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 15,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 3,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&auto=format&fit=crop",
+                    Allergens = "Soy, Gluten",
+                    VariantsJson = "[{\"groupName\":\"Spice Preference\",\"options\":[{\"name\":\"Medium Spice\",\"price\":340},{\"name\":\"Extra Spicy Angaare\",\"price\":340}]}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["STARTERS"].Id,
+                    ItemCode = "MNU-IND-STR-04",
+                    ItemName = "Amritsari Fish Fry",
+                    Category = "STARTERS",
+                    Description = "Crispy carom-seed spiced river sole fillets golden fried in seasoned gram flour batter, dusted with tangy chaat masala.",
+                    Price = 520.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 15,
+                    DietaryType = "NON_VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 4,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600&auto=format&fit=crop",
+                    Allergens = "Fish",
+                    AddOnsJson = "[{\"name\":\"Tartar Dip\",\"price\":40},{\"name\":\"Fried Salted Chillies\",\"price\":20}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["STARTERS"].Id,
+                    ItemCode = "MNU-IND-STR-05",
+                    ItemName = "Dahi Ke Kebab",
+                    Category = "STARTERS",
+                    Description = "Velvety hung curd patties infused with roasted cumin, finely chopped fresh mint, coriander, and ruby pomegranate pearls.",
+                    Price = 360.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 12,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 5,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy",
+                    VariantsJson = "[{\"groupName\":\"Portion\",\"options\":[{\"name\":\"Standard (4 Pcs)\",\"price\":360}]}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["STARTERS"].Id,
+                    ItemCode = "MNU-IND-STR-06",
+                    ItemName = "Lucknowi Galouti Mutton Kebab",
+                    Category = "STARTERS",
+                    Description = "Melt-in-mouth Awadhi minced mutton patties smoked with aromatic cloves and royal potli spices, served on mini saffron sheermal.",
+                    Price = 580.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 22,
+                    DietaryType = "NON_VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    IsFeatured = true,
+                    DisplayOrder = 6,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy, Cashew Nuts",
+                    VariantsJson = "[{\"groupName\":\"Serving\",\"options\":[{\"name\":\"4 Pcs with Mini Sheermal\",\"price\":580}]}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["STARTERS"].Id,
+                    ItemCode = "MNU-IND-STR-07",
+                    ItemName = "Crispy Pepper Corn",
+                    Category = "STARTERS",
+                    Description = "Golden sweet corn kernels tossed with crushed black peppercorns, scallions, bell peppers, and toasted white sesame.",
+                    Price = 290.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 10,
+                    DietaryType = "VEGAN",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 7,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1551248429-40975aa4de74?w=600&auto=format&fit=crop",
+                    Allergens = "Sesame",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+
+                // --- MAINS ---
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["MAINS"].Id,
+                    ItemCode = "MNU-IND-CUR-01",
+                    ItemName = "Dal Makhani Bukhara",
+                    Category = "MAINS",
+                    Description = "Urad lentils slow-cooked overnight for 24 hours on gentle charcoal with churned unsalted white butter, cream, and sun-ripened tomatoes.",
+                    Price = 390.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 15,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    IsFeatured = true,
+                    DisplayOrder = 8,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy",
+                    VariantsJson = "[{\"groupName\":\"Style\",\"options\":[{\"name\":\"Bukhara Classic\",\"price\":390},{\"name\":\"Extra Cream & Makkhan\",\"price\":430}]}]",
+                    AddOnsJson = "[{\"name\":\"Dollop of Desi Makkhan\",\"price\":35}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["MAINS"].Id,
+                    ItemCode = "MNU-IND-CUR-02",
+                    ItemName = "Old Delhi Butter Chicken",
+                    Category = "MAINS",
+                    Description = "Tandoori smoked chicken cooked in a satin-smooth gravy of ripe tomatoes, cashew paste, wild honey, and aromatic dried fenugreek.",
+                    Price = 540.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 20,
+                    DietaryType = "NON_VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    IsFeatured = true,
+                    DisplayOrder = 9,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy, Cashew Nuts",
+                    VariantsJson = "[{\"groupName\":\"Cut\",\"options\":[{\"name\":\"Boneless Chicken Morsels\",\"price\":540},{\"name\":\"Tandoori Bone-in Classic\",\"price\":510}]}]",
+                    AddOnsJson = "[{\"name\":\"Extra Rich Makhani Gravy\",\"price\":80}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["MAINS"].Id,
+                    ItemCode = "MNU-IND-CUR-03",
+                    ItemName = "Paneer Butter Masala",
+                    Category = "MAINS",
+                    Description = "Soft Malai paneer cubes simmered in a luscious butter tomato gravy scented with green cardamom and royal kasoori methi.",
+                    Price = 440.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 16,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 10,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy, Cashew Nuts",
+                    VariantsJson = "[{\"groupName\":\"Spice Preference\",\"options\":[{\"name\":\"Mild Velvet\",\"price\":440},{\"name\":\"North Indian Spicy\",\"price\":440}]}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["MAINS"].Id,
+                    ItemCode = "MNU-IND-CUR-04",
+                    ItemName = "Kashmiri Mutton Rogan Josh",
+                    Category = "MAINS",
+                    Description = "Slow-braised spring lamb shanks simmered in a fragrant Kashmiri gravy infused with ratanjot, dry ginger (sonth), and wild fennel.",
+                    Price = 620.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 25,
+                    DietaryType = "NON_VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    IsFeatured = true,
+                    DisplayOrder = 11,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop",
+                    Allergens = "None",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["MAINS"].Id,
+                    ItemCode = "MNU-IND-CUR-05",
+                    ItemName = "Kadhai Murgh Peshawari",
+                    Category = "MAINS",
+                    Description = "Succulent chicken chunks tossed with freshly roasted coriander seeds, black peppercorns, crispy bell peppers, and hand-ground masala.",
+                    Price = 510.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 18,
+                    DietaryType = "NON_VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 12,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop",
+                    Allergens = "None",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["MAINS"].Id,
+                    ItemCode = "MNU-IND-CUR-06",
+                    ItemName = "Royal Malai Kofta",
+                    Category = "MAINS",
+                    Description = "Handmade cottage cheese and golden raisin croquettes drowned in an imperial white cashew gravy scented with saffron and kewra.",
+                    Price = 460.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 16,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 13,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy, Cashew Nuts",
+                    VariantsJson = "[{\"groupName\":\"Gravy Base\",\"options\":[{\"name\":\"White Shahi Cashew\",\"price\":460},{\"name\":\"Red Makhani Base\",\"price\":460}]}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["MAINS"].Id,
+                    ItemCode = "MNU-IND-CUR-07",
+                    ItemName = "Amritsari Pindi Chole",
+                    Category = "MAINS",
+                    Description = "Authentic Punjabi chickpeas slow-stewed with dried amla, anardana, toasted cumin, and garnished with crispy ginger juliennes.",
+                    Price = 320.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 14,
+                    DietaryType = "VEGAN",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 14,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&auto=format&fit=crop",
+                    Allergens = "None",
+                    AddOnsJson = "[{\"name\":\"Pickled Green Chillies\",\"price\":20}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["MAINS"].Id,
+                    ItemCode = "MNU-IND-CUR-08",
+                    ItemName = "Chicken Tikka Masala",
+                    Category = "MAINS",
+                    Description = "Smoked char-grilled chicken tikka pieces finished in an onion-tomato gravy with capsicum and fresh coriander.",
+                    Price = 520.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 18,
+                    DietaryType = "NON_VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 15,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["MAINS"].Id,
+                    ItemCode = "MNU-IND-CUR-09",
+                    ItemName = "Yellow Dal Tadka (Dhaba Style)",
+                    Category = "MAINS",
+                    Description = "Slow-simmered yellow arhar dal double-tempered with golden garlic, cumin seeds, dry red chillies, and pure cow ghee.",
+                    Price = 290.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 12,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 16,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy",
+                    AddOnsJson = "[{\"name\":\"Double Desi Ghee Tadka\",\"price\":40}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["MAINS"].Id,
+                    ItemCode = "MNU-IND-CUR-10",
+                    ItemName = "Palak Paneer Lasooni",
+                    Category = "MAINS",
+                    Description = "Fresh baby spinach leaves puréed and tempered with burnt garlic, tossed with tender paneer cubes and finished with white butter.",
+                    Price = 420.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 15,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 17,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+
+                // --- BIRYANIS & RICE ---
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BIRYANIS"].Id,
+                    ItemCode = "MNU-IND-BIR-01",
+                    ItemName = "Hyderabadi Dum Chicken Biryani",
+                    Category = "BIRYANIS",
+                    Description = "Layered aged basmati rice and marinated chicken slow-cooked on dum in a sealed handi with saffron, caramelized onions, and fresh mint. Served with Mirchi Ka Salan and Raita.",
+                    Price = 520.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 22,
+                    DietaryType = "NON_VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    IsFeatured = true,
+                    DisplayOrder = 18,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy",
+                    VariantsJson = "[{\"groupName\":\"Portion\",\"options\":[{\"name\":\"Single Handi (Serves 1)\",\"price\":520},{\"name\":\"Family Handi (Serves 3)\",\"price\":1150}]}]",
+                    AddOnsJson = "[{\"name\":\"Extra Mirchi Ka Salan\",\"price\":40},{\"name\":\"Burani Garlic Raita\",\"price\":45}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BIRYANIS"].Id,
+                    ItemCode = "MNU-IND-BIR-02",
+                    ItemName = "Lucknowi Awadhi Mutton Biryani",
+                    Category = "BIRYANIS",
+                    Description = "Fragrant long-grain basmati rice cooked with tender baby goat meat infused with kewra, royal shahi jeera, and saffron strands. Served with pomegranate raita.",
+                    Price = 640.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 25,
+                    DietaryType = "NON_VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    IsFeatured = true,
+                    DisplayOrder = 19,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy",
+                    AddOnsJson = "[{\"name\":\"Mint Boondi Raita\",\"price\":45}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BIRYANIS"].Id,
+                    ItemCode = "MNU-IND-BIR-03",
+                    ItemName = "Subz Dum Handi Biryani",
+                    Category = "BIRYANIS",
+                    Description = "Farm fresh carrots, cauliflower, beans, and fresh paneer dum-cooked with basmati rice, rose water, and whole warm spices. Served with chilled cucumber raita.",
+                    Price = 390.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 18,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 20,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy",
+                    AddOnsJson = "[{\"name\":\"Cucumber Mint Raita\",\"price\":40}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BIRYANIS"].Id,
+                    ItemCode = "MNU-IND-BIR-04",
+                    ItemName = "Jeera Basmati Rice",
+                    Category = "BIRYANIS",
+                    Description = "Fluffy aged basmati rice tempered with golden cumin seeds and aromatic cow ghee.",
+                    Price = 220.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 10,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 21,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1516714435131-44d6b64dc6a2?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BIRYANIS"].Id,
+                    ItemCode = "MNU-IND-BIR-05",
+                    ItemName = "Steamed Basmati Rice",
+                    Category = "BIRYANIS",
+                    Description = "Classic steamed Dehradun long-grain fragrant rice.",
+                    Price = 180.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 8,
+                    DietaryType = "VEGAN",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 22,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1516714435131-44d6b64dc6a2?w=600&auto=format&fit=crop",
+                    Allergens = "None",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+
+                // --- BREADS ---
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BREADS"].Id,
+                    ItemCode = "MNU-IND-BRD-01",
+                    ItemName = "Butter Garlic Naan",
+                    Category = "BREADS",
+                    Description = "Clay tandoor baked leavened flatbread topped with crushed golden garlic, farm butter, and coriander.",
+                    Price = 95.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 8,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 23,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop",
+                    Allergens = "Gluten, Dairy",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BREADS"].Id,
+                    ItemCode = "MNU-IND-BRD-02",
+                    ItemName = "Cheese Chilli Garlic Naan",
+                    Category = "BREADS",
+                    Description = "Tandoor-baked naan stuffed with mozzarella cheese, bird's eye green chillies, and roasted garlic.",
+                    Price = 140.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 10,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 24,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop",
+                    Allergens = "Gluten, Dairy",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BREADS"].Id,
+                    ItemCode = "MNU-IND-BRD-03",
+                    ItemName = "Traditional Butter Naan",
+                    Category = "BREADS",
+                    Description = "Soft and pillowy clay-oven baked white bread glazed with unsalted white butter.",
+                    Price = 75.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 8,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 25,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop",
+                    Allergens = "Gluten, Dairy",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BREADS"].Id,
+                    ItemCode = "MNU-IND-BRD-04",
+                    ItemName = "Laccha Paratha (Crispy)",
+                    Category = "BREADS",
+                    Description = "Multi-layered flaky whole wheat bread baked in tandoor and brushed with desi ghee.",
+                    Price = 85.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 10,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 26,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop",
+                    Allergens = "Gluten, Dairy",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BREADS"].Id,
+                    ItemCode = "MNU-IND-BRD-05",
+                    ItemName = "Tandoori Roti (Butter)",
+                    Category = "BREADS",
+                    Description = "Healthy whole wheat unleavened flatbread freshly baked in tandoor with butter glaze.",
+                    Price = 45.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 6,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 27,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop",
+                    Allergens = "Gluten, Dairy",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+
+                // --- DESSERTS ---
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["DESSERTS"].Id,
+                    ItemCode = "MNU-IND-DES-01",
+                    ItemName = "Royal Gulab Jamun with Rabdi",
+                    Category = "DESSERTS",
+                    Description = "Warm golden mawa dumplings soaked in cardamom-saffron syrup, served over chilled thick slow-reduced lacchedar rabdi.",
+                    Price = 240.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 8,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    IsFeatured = true,
+                    DisplayOrder = 28,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy, Pistachio, Almonds",
+                    VariantsJson = "[{\"groupName\":\"Serving\",\"options\":[{\"name\":\"Warm with Rabdi (2 Pcs)\",\"price\":240},{\"name\":\"Classic Gulab Jamun (2 Pcs)\",\"price\":170}]}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["DESSERTS"].Id,
+                    ItemCode = "MNU-IND-DES-02",
+                    ItemName = "Kesar Pista Rasmalai",
+                    Category = "DESSERTS",
+                    Description = "Spongy handmade chenna patties poached and soaked in saffron-pistachio thickened milk, garnished with chandi varq.",
+                    Price = 260.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 6,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 29,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy, Pistachio, Almonds",
+                    VariantsJson = "[{\"groupName\":\"Portion\",\"options\":[{\"name\":\"Portion of 2 Discs\",\"price\":260}]}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["DESSERTS"].Id,
+                    ItemCode = "MNU-IND-DES-03",
+                    ItemName = "Shahi Gajar Ka Halwa",
+                    Category = "DESSERTS",
+                    Description = "Fresh winter red carrots grated and slow-cooked in full-cream milk, mawa, pure ghee, and roasted cashews.",
+                    Price = 280.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 8,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 30,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy, Cashew Nuts, Almonds",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+
+                // --- BEVERAGES ---
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BEVERAGES"].Id,
+                    ItemCode = "MNU-IND-BEV-01",
+                    ItemName = "Masala Kulhad Chai",
+                    Category = "BEVERAGES",
+                    Description = "Freshly brewed bold Assam CTC tea boiled with crushed ginger, cardamom pods, cloves, cinnamon, and whole milk, served in an earthy terracotta kulhad.",
+                    Price = 120.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 8,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 31,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy",
+                    VariantsJson = "[{\"groupName\":\"Sweetness\",\"options\":[{\"name\":\"Regular Sweet\",\"price\":120},{\"name\":\"Less Sugar\",\"price\":120},{\"name\":\"Sugar-Free Stevia\",\"price\":120}]}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BEVERAGES"].Id,
+                    ItemCode = "MNU-IND-BEV-02",
+                    ItemName = "Royal Mango Lassi",
+                    Category = "BEVERAGES",
+                    Description = "Thick churned creamy yogurt whipped with sweet Alphonso mango pulp, green cardamom, saffron strands, and crushed pistachios.",
+                    Price = 190.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 6,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    IsFeatured = true,
+                    DisplayOrder = 32,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1556881286-fc6915169721?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy, Pistachio",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BEVERAGES"].Id,
+                    ItemCode = "MNU-IND-BEV-03",
+                    ItemName = "Fresh Mint Lime Soda",
+                    Category = "BEVERAGES",
+                    Description = "Fresh squeezed key lime juice, chilled club soda, crushed mint sprigs, black rock salt, and roasted cumin.",
+                    Price = 140.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 5,
+                    DietaryType = "VEGAN",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 33,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=600&auto=format&fit=crop",
+                    Allergens = "None",
+                    VariantsJson = "[{\"groupName\":\"Flavor Style\",\"options\":[{\"name\":\"Sweet & Salt Mix\",\"price\":140},{\"name\":\"Salted Jeera\",\"price\":140},{\"name\":\"Pure Sweet\",\"price\":140}]}]",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                },
+                new()
+                {
+                    PropertyId = 1,
+                    MenuId = allDayMenu.Id,
+                    MenuCategoryId = catMap["BEVERAGES"].Id,
+                    ItemCode = "MNU-IND-BEV-04",
+                    ItemName = "Shahi Royal Thandai",
+                    Category = "BEVERAGES",
+                    Description = "Traditional festive cooler made with crushed almonds, fennel seeds, watermelon seeds, dried rose petals, whole black peppercorns, and saffron milk.",
+                    Price = 220.00m,
+                    TaxPercent = 5.0m,
+                    PreparationTimeMinutes = 8,
+                    DietaryType = "VEG",
+                    IsAvailable = true,
+                    IsGuestVisible = true,
+                    DisplayOrder = 34,
+                    Status = "PUBLISHED",
+                    ImageUrl = "https://images.unsplash.com/photo-1556881286-fc6915169721?w=600&auto=format&fit=crop",
+                    Allergens = "Dairy, Almonds, Pistachio",
+                    ApplicableOutlets = "ROOM_SERVICE,MAIN_RESTAURANT",
+                    CreatedBy = "SYSTEM"
+                }
+            };
+
+            _context.MenuItems.AddRange(indianDishes);
             await _context.SaveChangesAsync(cancellationToken);
         }
     }

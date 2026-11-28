@@ -86,6 +86,13 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("[HotelOS] Database successfully reset and re-seeded. Ready for use.");
         return;
     }
+    if (args.Contains("--seed-only"))
+    {
+        Console.WriteLine("[HotelOS] --seed-only flag detected. Running database seeder...");
+        await seeder.SeedAsync();
+        Console.WriteLine("[HotelOS] Seeding finished successfully.");
+        return;
+    }
     await seeder.SeedAsync();
 }
 
