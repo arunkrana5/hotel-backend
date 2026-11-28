@@ -20,8 +20,10 @@ public class GuestOrderService : IGuestOrderService
     public GuestOrderService(HotelOSDbContext _context, IConfiguration configuration)
     {
         this._context = _context;
-        // Allows custom domain or fallback to localhost / relative client path
-        _guestBaseUrl = configuration["GuestPortal:BaseUrl"] ?? "http://localhost:3000/guest/q";
+        var clientUrl = configuration["GuestPortal:BaseUrl"]
+            ?? (!string.IsNullOrWhiteSpace(configuration["App:ClientUrl"]) ? $"{configuration["App:ClientUrl"]!.TrimEnd('/')}/guest/q" : null)
+            ?? "https://hotelapi-jass.onrender.com/guest/q";
+        _guestBaseUrl = clientUrl;
     }
 
     public async Task<List<RoomQrCodeDto>> GetRoomQrCodesAsync(
